@@ -1,8 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js Boilerplate
+
+A modern, feature-rich starting point for Next.js 15 applications with React 19, TypeScript, and TailwindCSS.
+
+## Features
+
+- ⚡ [Next.js 15.3.2](https://nextjs.org/) with App Router
+- 🔥 [React 19](https://react.dev/) for the latest React features
+- 🎨 [TailwindCSS v4](https://tailwindcss.com/) for utility-first styling
+- 📦 TypeScript for type safety
+- 🧹 ESLint and Prettier for code quality
+- 🚀 Turbopack for faster development
+- 🔤 Google Fonts (Poppins) integration
+- 📁 Organized project structure
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18.17.0 or later
+- npm, yarn, pnpm, or bun
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/nextjs-boilerplate.git my-project
+
+# Navigate to the project directory
+cd my-project
+
+# Install dependencies
+npm install
+# or
+yarn
+# or
+pnpm install
+# or
+bun install
+```
+
+### Development
 
 ```bash
 npm run dev
@@ -16,21 +53,57 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+# or
+yarn build
+# or
+pnpm build
+# or
+bun build
+```
 
-## Learn More
+### Linting
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run lint
+# or
+yarn lint
+# or
+pnpm lint
+# or
+bun lint
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+📦 src
+ ┣ 📂 app            # App Router pages and layouts
+ ┣ 📂 components     # Reusable UI components
+ ┃ ┣ 📂 layout       # Layout components
+ ┃ ┗ 📂 ui           # UI components
+ ┣ 📂 hooks          # Custom React hooks
+ ┣ 📂 lib            # Utility functions and helpers
+ ┗ 📂 types          # TypeScript type definitions
+```
 
-## Deploy on Vercel
+## Development Guidelines
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Follow semantic versioning for releases
+- Use conventional commits for version control
+- Maintain the CHANGELOG.md for tracking changes
+- Use the branch strategy outlined in rules.md
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+
+MIT
+
+## Acknowledgements
+
+- [Next.js](https://nextjs.org/)
+- [React](https://react.dev/)
+- [TailwindCSS](https://tailwindcss.com/)
+- [TypeScript](https://www.typescriptlang.org/)
