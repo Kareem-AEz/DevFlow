@@ -1,0 +1,42 @@
+import { z } from "zod";
+
+export const SignInSchema = z.object({
+  email: z
+    .string()
+    .min(1, { message: "Email is required." })
+    .email({ message: "Please enter a valid email." }),
+
+  password: z.string().min(1, { message: "Password is required." }),
+});
+
+export const SignUpSchema = SignInSchema.extend({
+  username: z
+    .string()
+    .min(3, { message: "Username must be at least 3 characters." })
+    .max(30, { message: "Username must be at most 30 characters." })
+    .regex(/^[a-zA-Z0-9_]+$/, {
+      message: "Username can only contain letters, numbers, and underscores.",
+    }),
+
+  name: z
+    .string()
+    .min(3, { message: "Name must be at least 3 characters." })
+    .max(30, { message: "Name must be at most 30 characters." })
+    .regex(/^[a-zA-Z\s]+$/, {
+      message: "Name can only contain letters and spaces.",
+    }),
+
+  email: z
+    .string()
+    .min(1, { message: "Email is required." })
+    .email({ message: "Please enter a valid email address." }),
+
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters." })
+    .max(30, { message: "Password must be at most 30 characters." })
+    .regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/, {
+      message:
+        "Password must contain at least one letter, one number, and one special character.",
+    }),
+});
