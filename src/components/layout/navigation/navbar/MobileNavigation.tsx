@@ -20,7 +20,8 @@ import { ROUTES } from "@/constants/routes";
 function MobileNavigation() {
   return (
     <Sheet>
-      <SheetTrigger>
+      <SheetTrigger aria-label="Open menu">
+        <span className="hidden">Menu</span>
         {/*  eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={"/icons/hamburger.svg"}

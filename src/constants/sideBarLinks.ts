@@ -1,38 +1,36 @@
-import { ROUTES } from "./routes";
-
 export const sidebarLinks = [
   {
-    PATH: ROUTES.HOME,
+    PATH: "/",
     LABEL: "Home",
     ImgURL: "/icons/home.svg",
   },
   {
-    PATH: ROUTES.COMMUNITIES,
+    PATH: "/community",
     LABEL: "Community",
     ImgURL: "/icons/users.svg",
   },
   {
-    PATH: ROUTES.COLLECTIONS,
+    PATH: "/collections",
     LABEL: "Collections",
     ImgURL: "/icons/star.svg",
   },
   {
-    PATH: ROUTES.JOBS,
+    PATH: "/jobs",
     LABEL: "Find Jobs",
     ImgURL: "/icons/suitcase.svg",
   },
   {
-    PATH: ROUTES.TAGS,
+    PATH: "/tags",
     LABEL: "Tags",
     ImgURL: "/icons/tag.svg",
   },
   {
-    PATH: ROUTES.PROFILE,
+    PATH: "/profile",
     LABEL: "Profile",
     ImgURL: "/icons/user.svg",
   },
   {
-    PATH: ROUTES.ASK_A_QUESTION,
+    PATH: "/ask-a-question",
     LABEL: "Ask a question",
     ImgURL: "/icons/question.svg",
   },
