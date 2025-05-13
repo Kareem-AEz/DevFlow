@@ -8,7 +8,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 
-import ROUTES from "@/constants/routes";
+import { ROUTES } from "@/constants/routes";
 
 const buttonClassName =
   "background-dark400_light900 body-medium text-dark200_light800 rounded-2 min-h-12 flex-1 px-4 py-3.5";

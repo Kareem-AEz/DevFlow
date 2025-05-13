@@ -2,6 +2,7 @@ import React from "react";
 
 import Link from "next/link";
 
+import MobileNavigation from "./MobileNavigation";
 import ModeToggle from "./mode-toggle";
 
 function Navbar() {
@@ -23,6 +24,8 @@ function Navbar() {
 
       <div className="flex-between gap-5">
         <ModeToggle />
+
+        <MobileNavigation />
       </div>
     </nav>
   );

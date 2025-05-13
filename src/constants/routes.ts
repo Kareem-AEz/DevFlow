@@ -1,7 +1,11 @@
-const ROUTES = {
+export const ROUTES = {
   HOME: "/",
   SIGN_IN: "/sign-in",
   SIGN_UP: "/sign-up",
+  COMMUNITIES: "/community",
+  COLLECTIONS: "/collections",
+  JOBS: "/jobs",
+  TAGS: "/tags",
+  ASK_A_QUESTION: "/ask-a-question",
+  PROFILE: "/profile",
 };
-
-export default ROUTES;

@@ -272,7 +272,25 @@
 }
 
 @utility primary-gradient {
+  position: relative;
+  z-index: 1;
   background: linear-gradient(129deg, #ff7000 0%, #e2995f 100%);
+  overflow: hidden;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(129deg, #e2995f 0%, #ff7000 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover::before {
+    opacity: 1;
+  }
 }
 
 @utility dark-gradient {
