@@ -5,6 +5,16 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
 @theme {
   --default-font-family: "Inter", sans-serif;
   --font-space-grotesk: "Space Grotesk", sans-serif;

@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/constants/routes";
 
 const buttonClassName =
-  "background-dark400_light900 body-medium text-dark200_light800 rounded-2 min-h-12 flex-1 px-4 py-3.5";
+  "background-dark400_light900 body-medium text-dark200_light800 rounded-2 min-h-12 flex-1 px-4 py-3.5 flex items-center justify-center gap-3.5";
 
 function SocialAuthForm() {
   const { data: session } = useSession();
@@ -41,18 +41,18 @@ function SocialAuthForm() {
   };
 
   return (
-    <div className="mt-10 flex flex-wrap gap-2.5">
+    <div className="mt-10 flex flex-wrap gap-2.5 max-lg:flex-col">
       <Button
         className={buttonClassName}
         onClick={() => handleSignIn("github")}
       >
         {/*  eslint-disable-next-line @next/next/no-img-element */}
         <img
-          className="invert-colors mr-2.5 object-contain"
+          className="invert-colors size-5 object-contain"
           src="/icons/github.svg"
           alt="Github Logo"
         />
-        <span>Sign in with Github</span>
+        <span className="max-lg:hidden">Sign in with Github</span>
       </Button>
 
       <Button
@@ -61,11 +61,11 @@ function SocialAuthForm() {
       >
         {/*  eslint-disable-next-line @next/next/no-img-element */}
         <img
-          className="mr-2.5 object-contain"
+          className="size-5 object-contain"
           src="/icons/google.svg"
           alt="Github Logo"
         />
-        <span>Sign in with Google</span>
+        <span className="max-lg:hidden">Sign in with Google</span>
       </Button>
     </div>
   );
