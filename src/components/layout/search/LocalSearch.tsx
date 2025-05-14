@@ -34,6 +34,7 @@ const LocalSearch = ({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [searchQuery, setSearchQuery] = useState(query ?? "");
+  const [isMac, setIsMac] = useState(false);
 
   // Reset search state when Escape key is pressed
   useKey(
@@ -66,6 +67,10 @@ const LocalSearch = ({
       setSearchQuery("");
     }
   }, [pathname, route, searchParams]);
+
+  useEffect(() => {
+    setIsMac(/Mac|iPhone|iPad|iPod/i.test(navigator.platform));
+  }, []);
 
   useEffect(() => {
     const debounceSearch = setTimeout(() => {
@@ -108,6 +113,7 @@ const LocalSearch = ({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ type: "spring", bounce: 0.4, duration: 0.5 }}
+              aria-label="Clear search"
             >
               <X className="size-5" />
             </motion.button>
@@ -123,6 +129,7 @@ const LocalSearch = ({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ type: "spring", bounce: 0.4, duration: 0.5 }}
+              aria-hidden="true"
             />
           )}
         </AnimatePresence>
@@ -134,6 +141,7 @@ const LocalSearch = ({
         value={searchQuery ?? ""}
         onChange={(e) => setSearchQuery(e.target.value)}
         className="paragraph-regular no-focus placeholder:text-dark200_light700 text-dark400_light700 border-none !bg-transparent shadow-none outline-none"
+        autoComplete="off"
       />
       <div className="text-dark300_light700 border-dark-400/10 bg-dark-300/10 hidden items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium sm:flex">
         <AnimatePresence mode="wait" initial={false}>
@@ -157,7 +165,7 @@ const LocalSearch = ({
               exit={{ opacity: 0, y: -5 }}
               transition={{ type: "spring", bounce: 0.4, duration: 0.5 }}
             >
-              <span>Ctrl</span>
+              <span>{isMac ? "⌘" : "Ctrl"}</span>
               <span>+</span>
               <span>K</span>
             </motion.div>
