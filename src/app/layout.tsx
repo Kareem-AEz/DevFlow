@@ -8,6 +8,7 @@ import { auth } from "@/lib/auth";
 import { generateMetadata } from "@/lib/metadata";
 
 import { Toaster } from "@/components/ui/sonner";
+import Footer from "@/components/layout/Footer";
 
 import "./globals.css";
 
@@ -50,7 +51,7 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             <NuqsAdapter>{children}</NuqsAdapter>
-
+            <Footer />
             <Toaster />
           </ThemeProvider>
           <link
