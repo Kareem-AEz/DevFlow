@@ -2,7 +2,6 @@ import React from "react";
 
 import Link from "next/link";
 
-import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetClose,
@@ -13,9 +12,9 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-import NavLinks from "./NavLinks";
+import AuthButtons from "../../forms/AuthButtons";
 
-import { ROUTES } from "@/constants/routes";
+import NavLinks from "./NavLinks";
 
 function MobileNavigation() {
   return (
@@ -51,7 +50,7 @@ function MobileNavigation() {
           </SheetDescription>
         </SheetHeader>
 
-        <div className="mx-8 mb-8 flex h-[calc(100vh-80px)] flex-col justify-between gap-6 overflow-y-auto pt-16">
+        <div className="mx-3 flex h-[calc(100vh-80px)] flex-col justify-between gap-6 overflow-y-auto pt-16">
           <SheetClose asChild>
             <section className="flex h-full flex-col">
               <NavLinks isMobileNav />
@@ -60,19 +59,7 @@ function MobileNavigation() {
 
           <div className="flex flex-col gap-3">
             <SheetClose asChild>
-              <Link href={ROUTES.SIGN_IN} className="button-primary">
-                <Button className="small-medium btn-secondary min-h-11 w-full rounded-lg px-4 py-3 shadow-none">
-                  <span className="primary-text-gradient">Sign In</span>
-                </Button>
-              </Link>
-            </SheetClose>
-
-            <SheetClose asChild>
-              <Link href={ROUTES.SIGN_UP} className="button-primary">
-                <Button className="small-medium light-border-2 btn-tertiary text-dark400_light900 min-h-11 w-full rounded-lg border px-4 py-3 shadow-none">
-                  <span className="primary-text-gradient">Sign Up</span>
-                </Button>
-              </Link>
+              <AuthButtons />
             </SheetClose>
           </div>
         </div>

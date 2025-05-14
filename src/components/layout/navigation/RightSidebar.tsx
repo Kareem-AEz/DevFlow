@@ -76,6 +76,8 @@ function RightSidebar() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={"/icons/chevron-right.svg"}
+                width={24}
+                height={24}
                 className="invert-colors size-6 transition-transform duration-200 group-hover:translate-x-1"
                 alt="Chevron Right"
               />

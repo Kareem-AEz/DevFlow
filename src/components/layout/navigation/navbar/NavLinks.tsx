@@ -4,6 +4,8 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { motion } from "motion/react";
+
 import { cn } from "@/lib/utils";
 
 import { SheetClose } from "@/components/ui/sheet";
@@ -26,35 +28,41 @@ function NavLinks({ isMobileNav = false }: { isMobileNav?: boolean }) {
         }
 
         const LinkComponent = (
-          <Link
-            href={link.PATH}
-            key={link.PATH}
-            className={cn(
-              isActive
-                ? "primary-gradient text-light-900 rounded-lg"
-                : "text-dark300_light900",
-              "flex items-center justify-start gap-4 bg-transparent p-4 max-lg:justify-center",
-            )}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={link.ImgURL}
-              alt={`${link.LABEL} icon`}
-              className={cn({ "invert-colors": !isActive })}
-            />
-            <p
+          <Link className="group relative" key={link.PATH} href={link.PATH}>
+            <div
               className={cn(
-                isActive ? "base-bold" : "base-medium",
-                !isMobileNav && "max-lg:hidden",
+                isActive ? "text-light-900" : "text-dark300_light900",
+                "text-dark300_light900 relative z-10 flex items-center justify-start gap-4 rounded-lg bg-transparent p-4",
               )}
             >
-              {link.LABEL}
-            </p>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={link.ImgURL}
+                alt={`${link.LABEL} icon`}
+                width={20}
+                height={20}
+                className={cn("invert-colors", "size-5")}
+              />
+              <p className={cn(!isMobileNav && "max-lg:hidden", "base-medium")}>
+                {link.LABEL}
+              </p>
+            </div>
+
+            {isActive && (
+              <motion.div
+                layoutId={isMobileNav ? "activeMobileLink" : "activeLink"}
+                transition={{ type: "spring", bounce: 0.12, duration: 0.8 }}
+                className="primary-gradient absolute inset-0 h-full w-full rounded-lg"
+              />
+            )}
+            <div className="background-light800_dark400 absolute inset-0 h-full w-full rounded-lg opacity-0 transition-opacity duration-300" />
           </Link>
         );
 
         return isMobileNav ? (
-          <SheetClose asChild>{LinkComponent}</SheetClose>
+          <SheetClose key={link.PATH} asChild>
+            {LinkComponent}
+          </SheetClose>
         ) : (
           LinkComponent
         );
