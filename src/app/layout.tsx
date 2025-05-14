@@ -2,6 +2,8 @@ import { Inter, Space_Grotesk as SpaceGrotesk } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
 
+import { NuqsAdapter } from "nuqs/adapters/next/app";
+
 import { auth } from "@/lib/auth";
 import { generateMetadata } from "@/lib/metadata";
 
@@ -37,13 +39,6 @@ export default async function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
-        />
-      </head>
       <SessionProvider session={session}>
         <body
           className={`${inter.className} ${spaceGrotesk.variable} antialiased`}
@@ -54,10 +49,15 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <NuqsAdapter>{children}</NuqsAdapter>
 
             <Toaster />
           </ThemeProvider>
+          <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
+          />
         </body>
       </SessionProvider>
     </html>

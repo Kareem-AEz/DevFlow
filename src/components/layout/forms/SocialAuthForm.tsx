@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 
 import { toast } from "sonner";
 
@@ -14,8 +14,6 @@ const buttonClassName =
   "background-dark400_light900 body-medium text-dark200_light800 rounded-2 min-h-12 flex-1 px-4 py-3.5 flex items-center justify-center gap-3.5";
 
 function SocialAuthForm() {
-  const { data: session } = useSession();
-  console.log(session);
   /*
    * This function handles the sign-in process for the specified provider (GitHub or Google).
    * It uses the `signIn` function from `next-auth/react` to initiate the sign-in process.

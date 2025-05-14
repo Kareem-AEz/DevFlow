@@ -7,7 +7,7 @@ import ModeToggle from "./mode-toggle";
 
 function Navbar() {
   return (
-    <nav className="flex-between background-light900_dark200 shadow-light-300 dark:shadow-2xl fixed z-50 w-full gap-5 p-6 sm:px-12">
+    <nav className="flex-between background-light900_dark200 shadow-light-300 fixed z-50 w-full gap-5 p-6 sm:px-12 dark:shadow-2xl">
       <Link className="flex items-center gap-2" href="/">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img

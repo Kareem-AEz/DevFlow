@@ -11,7 +11,9 @@ import { Button } from "./button";
 function SignOutButton() {
   return (
     <Button
-      onClick={() => signOut()}
+      onClick={() => {
+        signOut();
+      }}
       className="background-dark400_light900 body-medium text-dark200_light800 rounded-2 min-h-12 px-4 py-3.5"
     >
       <LucideDoorOpen />

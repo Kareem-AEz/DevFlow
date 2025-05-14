@@ -8,6 +8,11 @@ import { SignUpSchema } from "@/lib/validations";
 
 import AuthForm from "@/components/layout/forms/AuthForm";
 
+export const SIGN_UP_FIELDS = {
+  TYPE: "signup",
+  FIELDS: ["username", "name", "email", "password"],
+};
+
 function SignUp() {
   return (
     <>
@@ -44,12 +49,11 @@ function SignUp() {
       />
 
       <p className="mt-4">
-        Already have an account?
+        Already have an account?{" "}
         <Link
           href="/sign-in"
           className="paragraph-semibold primary-text-gradient"
         >
-          {" "}
           Sign In
         </Link>
       </p>
