@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { getSearchParams } from "@/lib/searchParams";
 
+import QuestionCard from "@/components/layout/cards/QuestionCard";
 import HomeFilter from "@/components/layout/filters/HomeFilter";
 import LocalSearch from "@/components/layout/search/LocalSearch";
 import { Button } from "@/components/ui/button";
@@ -26,7 +27,7 @@ const questions = [
     author: {
       _id: "1",
       name: "John Doe",
-      picture: "https://github.com/shadcn.png",
+      image: "https://github.com/shadcn.png",
     },
     upvotes: 10,
     views: 100,
@@ -41,7 +42,7 @@ const questions = [
     author: {
       _id: "2",
       name: "Jane Doe",
-      picture: "https://github.com/shadcn.png",
+      image: "https://github.com/shadcn.png",
     },
     upvotes: 12,
     views: 22,
@@ -60,12 +61,12 @@ const questions = [
     author: {
       _id: "2",
       name: "Jane Doe",
-      picture: "https://github.com/shadcn.png",
+      image: "https://github.com/shadcn.png",
     },
     upvotes: 12,
     views: 22,
     answers: 10,
-    createdAt: new Date(),
+    createdAt: new Date(`2025-02-30T22:00:00.000Z`),
   },
 ];
 
@@ -75,7 +76,6 @@ export default async function Home({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const { query } = await getSearchParams(searchParams);
-  console.log(query);
 
   // Convert query to string whether it's a string or an array
   const queryString = Array.isArray(query) ? query[0] : query || "";
@@ -107,9 +107,10 @@ export default async function Home({
       {/*   */}
       <HomeFilter />
       {/*  */}
+      <p></p>
       <div className="mt-10 flex w-full flex-col gap-6">
         {filteredQuestions.map((question) => (
-          <p key={question._id}> {question.title}</p>
+          <QuestionCard key={question._id} question={question} />
         ))}
       </div>
     </>

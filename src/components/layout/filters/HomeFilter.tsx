@@ -6,13 +6,14 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckIcon } from "lucide-react";
+import { useScramble } from "use-scramble";
 
 import { formUrlQuery, removeUrlQueryParams } from "@/lib/url";
 import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 
-const MotionButton = motion(Button);
+const MotionButton = motion.create(Button);
 
 const filters = [
   {
@@ -37,16 +38,6 @@ const filters = [
   },
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.07,
-    },
-  },
-};
-
 const buttonVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -62,6 +53,13 @@ const HomeFilter = () => {
   const searchParams = useSearchParams();
   const paramFilter = searchParams.get("filter") || "all";
   const [selectedFilter, setSelectedFilter] = useState(paramFilter);
+
+  const { ref } = useScramble({
+    text: selectedFilter.charAt(0).toUpperCase() + selectedFilter.slice(1),
+    overflow: true,
+    speed: 0.4,
+    playOnMount: false,
+  });
 
   // Keep filter state in sync with URL when navigation occurs
   useEffect(() => {
@@ -90,12 +88,7 @@ const HomeFilter = () => {
   };
 
   return (
-    <motion.div
-      className="mt-10 hidden flex-wrap items-center gap-2 sm:flex"
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
+    <motion.div className="mt-10 hidden flex-wrap items-center gap-2 sm:flex">
       {filters.map((filter) => {
         const isSelected = selectedFilter === filter.value;
 
@@ -130,7 +123,7 @@ const HomeFilter = () => {
             >
               {filter.label}
             </motion.span>
-            <AnimatePresence mode="popLayout">
+            <AnimatePresence mode="popLayout" initial={false}>
               {isSelected && (
                 <motion.span
                   key={`${filter.value}-indicator`}
@@ -151,6 +144,18 @@ const HomeFilter = () => {
           </MotionButton>
         );
       })}
+      <motion.p
+        ref={ref}
+        className="text-light-500 min-h-5 text-sm"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        transition={{
+          type: "spring",
+          duration: 0.6,
+          bounce: 0.2,
+        }}
+      />
     </motion.div>
   );
 };
