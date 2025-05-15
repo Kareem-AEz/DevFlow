@@ -10,7 +10,7 @@ import { ROUTES } from "@/constants/routes";
 
 interface TagCardProps {
   name: string;
-  questions: number;
+  questions?: number;
   showCount?: boolean;
   compact?: boolean;
 }
@@ -22,7 +22,7 @@ function TagCard({ name, questions, showCount, compact }: TagCardProps) {
     <Link href={ROUTES.TAGS(name)} className="flex justify-between gap-2">
       <Badge className="subtle-medium background-light800_dark300 text-light400_light500 rounded-md border-none px-4 py-2 uppercase">
         <div className="flex-center space-x-2">
-          {!compact && <i className={`${devIconClassName} text-base`} />}
+          {!compact && <i className={`${devIconClassName} size-4 text-base`} />}
           <span>{name}</span>
         </div>
       </Badge>
