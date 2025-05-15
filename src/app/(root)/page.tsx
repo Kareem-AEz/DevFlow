@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { getSearchParams } from "@/lib/searchParams";
 
+import HomeFilter from "@/components/layout/filters/HomeFilter";
 import LocalSearch from "@/components/layout/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 
@@ -104,7 +105,7 @@ export default async function Home({
         />
       </section>
       {/*   */}
-      HomeFilter
+      <HomeFilter />
       {/*  */}
       <div className="mt-10 flex w-full flex-col gap-6">
         {filteredQuestions.map((question) => (
