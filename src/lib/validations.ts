@@ -53,7 +53,7 @@ export const AskQuestionSchema = z.object({
     .array(
       z
         .string()
-        .min(1, { message: "Tag is required." })
+        .min(3, { message: "Tag must be at least 3 characters." })
         .max(30, { message: "Tag must be at most 30 characters." }),
     )
     .min(1, { message: "At least one tag is required." })

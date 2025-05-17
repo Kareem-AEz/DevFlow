@@ -3,10 +3,12 @@
 import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AnimatePresence, motion } from "framer-motion";
 import { z } from "zod";
 
 import { AskQuestionSchema } from "@/lib/validations";
 
+import Editor from "@/components/layout/editor/Editor";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -19,6 +21,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
+import TagCard from "../cards/TagCard";
+
+const MotionTagCard = motion.create(TagCard);
+
 const QuestionForm = () => {
   const form = useForm<z.infer<typeof AskQuestionSchema>>({
     resolver: zodResolver(AskQuestionSchema),
@@ -29,8 +35,53 @@ const QuestionForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof AskQuestionSchema>) {
-    console.log(values);
+  function handleInputKeyDown(
+    e: React.KeyboardEvent<HTMLInputElement>,
+    field: {
+      value: string[];
+    },
+  ) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const tagInput = e.currentTarget.value.trim();
+
+      if (tagInput.length < 3) {
+        form.setError("tags", {
+          type: "manual",
+          message: "Tag must be at least 3 characters",
+        });
+      } else if (tagInput.length > 30) {
+        form.setError("tags", {
+          type: "manual",
+          message: "Tag must be less than 30 characters",
+        });
+      } else if (field.value.includes(tagInput)) {
+        form.setError("tags", {
+          type: "manual",
+          message: "Tag already exists",
+        });
+      } else {
+        form.setValue("tags", [...field.value, tagInput]);
+        e.currentTarget.value = "";
+        form.clearErrors("tags");
+      }
+    }
+  }
+
+  function handleRemoveTag(tag: string, field: { value: string[] }) {
+    const newTags = field.value.filter((t) => t !== tag);
+    form.setValue("tags", newTags);
+
+    if (newTags.length === 0) {
+      form.setError("tags", {
+        type: "manual",
+        message: "Tags are required",
+      });
+    }
+  }
+
+  function onSubmit(data: z.infer<typeof AskQuestionSchema>) {
+    console.log(data);
   }
 
   return (
@@ -72,7 +123,9 @@ const QuestionForm = () => {
                 Question Description
                 <span className="text-primary-500">*</span>
               </FormLabel>
-              <FormControl>Editor</FormControl>
+              <FormControl>
+                <Editor value={field.value} onChange={field.onChange} />
+              </FormControl>
               <FormDescription className="body-regular text-light-500">
                 Write a detailed description of your question.
               </FormDescription>
@@ -85,18 +138,49 @@ const QuestionForm = () => {
           name="tags"
           render={({ field }) => (
             <FormItem className="flex w-full flex-col">
-              <FormLabel className="paragraph-semibold text-dark400_light800">
+              <FormLabel
+                htmlFor="question-tags"
+                className="paragraph-semibold text-dark400_light800"
+              >
                 Question Tags
                 <span className="text-primary-500">*</span>
               </FormLabel>
               <FormControl>
-                <div>
+                <div className="flex flex-col items-start justify-center gap-3">
                   <Input
+                    id="question-tags"
                     placeholder="Add tags"
-                    {...field}
                     className="paragraph-regular background-light700_dark300 light-border-2 text-dark300_light700 min-h-14 border"
+                    onKeyDown={(e) => handleInputKeyDown(e, field)}
                   />
-                  Tags
+                  {field.value.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      <AnimatePresence initial={false} mode="popLayout">
+                        {field.value.map((tag) => (
+                          <MotionTagCard
+                            key={tag}
+                            layout
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{
+                              opacity: 0,
+                              scale: 0.8,
+                              transition: { duration: 0.2 },
+                            }}
+                            transition={{
+                              type: "spring",
+                              duration: 0.6,
+                              bounce: 0.3,
+                            }}
+                            name={tag}
+                            remove
+                            isButton
+                            handleRemove={() => handleRemoveTag(tag, field)}
+                          />
+                        ))}
+                      </AnimatePresence>
+                    </div>
+                  )}
                 </div>
               </FormControl>
               <FormDescription className="body-regular text-light-500">
