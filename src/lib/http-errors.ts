@@ -32,7 +32,7 @@ export class ValidationError extends RequestError {
           return `${fieldName} is required`;
         }
 
-        return messages.join(" and ");
+        return messages.join(", and ");
       })
       .join(", ");
   }
