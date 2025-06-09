@@ -70,11 +70,24 @@ const questions = [
   },
 ];
 
+// const test = async () => {
+//   try {
+//     throw new ValidationError({
+//       title: ["Required"],
+//       tags: ['"JavaScript" is not a valid tag'],
+//     });
+//   } catch (error) {
+//     return handleError(error);
+//   }
+// };
+
 export default async function Home({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
+  // await test();
+
   const { query } = await getSearchParams(searchParams);
 
   // Convert query to string whether it's a string or an array
