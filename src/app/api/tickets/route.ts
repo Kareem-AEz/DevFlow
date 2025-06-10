@@ -16,5 +16,3 @@ export async function POST(request: Request) {
 
   return NextResponse.json(tickets);
 }
-
-// Get by ID

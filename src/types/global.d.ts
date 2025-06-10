@@ -1,3 +1,5 @@
+import { NextResponse } from "next/server";
+
 // Tag type
 type Tag = {
   readonly _id: string;
@@ -23,3 +25,25 @@ type Question = {
   upvotes: number;
   views: number;
 };
+
+// Action response type
+type ActionResponse<T = null> = {
+  success: boolean;
+  data?: T;
+  error?: {
+    message: string;
+    details?: Record<string, string[]>;
+  };
+  status?: number;
+};
+
+// Success response type
+type SuccessResponse<T = null> = ActionResponse<T> & { success: true };
+
+// Error response type
+type ErrorResponse = ActionResponse<undefined> & { success: false };
+
+// API response type
+type APIErrorResponse = NextResponse<ErrorResponse>;
+
+type APIResponse<T = null> = NextResponse<SuccessResponse<T>> | ErrorResponse;
