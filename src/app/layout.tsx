@@ -7,8 +7,8 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { auth } from "@/lib/auth";
 import { generateMetadata } from "@/lib/metadata";
 
-import { Toaster } from "@/components/ui/sonner";
 import Footer from "@/components/layout/Footer";
+import { Toaster } from "@/components/ui/sonner";
 
 import "./globals.css";
 
