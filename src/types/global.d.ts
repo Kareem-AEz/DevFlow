@@ -46,4 +46,6 @@ type ErrorResponse = ActionResponse<undefined> & { success: false };
 // API response type
 type APIErrorResponse = NextResponse<ErrorResponse>;
 
-type APIResponse<T = null> = NextResponse<SuccessResponse<T>> | ErrorResponse;
+type APIResponse<T = null> =
+  | NextResponse<SuccessResponse<T>>
+  | APIErrorResponse;

@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { api } from "@/lib/api";
+import handleError from "@/lib/handlers/error";
 import { getSearchParams } from "@/lib/searchParams";
 
 import QuestionCard from "@/components/layout/cards/QuestionCard";
@@ -8,6 +10,7 @@ import LocalSearch from "@/components/layout/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 
 import { ROUTES } from "@/constants/routes";
+import { ErrorResponse } from "@/types/global";
 
 const questions = [
   {
@@ -70,23 +73,21 @@ const questions = [
   },
 ];
 
-// const test = async () => {
-//   try {
-//     throw new ValidationError({
-//       title: ["Required"],
-//       tags: ['"JavaScript" is not a valid tag'],
-//     });
-//   } catch (error) {
-//     return handleError(error);
-//   }
-// };
+const test = async () => {
+  try {
+    return await api.users.getAll();
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+};
 
 export default async function Home({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  // await test();
+  const response = await test();
+  console.log(response.data);
 
   const { query } = await getSearchParams(searchParams);
 
