@@ -6,7 +6,6 @@ import dbConnect from "@/lib/mongoose";
 import { UserSchema } from "@/lib/validations";
 
 import User from "@/database/user.model";
-import { APIErrorResponse } from "@/types/global";
 
 // POST /api/users/email - Find user by email (email in request body for security)
 export async function POST(request: Request) {
@@ -27,6 +26,6 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, data: user }, { status: 200 });
   } catch (error) {
-    return handleError(error, "api") as APIErrorResponse;
+    return handleError(error, "api");
   }
 }
