@@ -1,7 +1,6 @@
 import Link from "next/link";
 
-import { api } from "@/lib/api";
-import handleError from "@/lib/handlers/error";
+import { auth } from "@/lib/auth";
 import { getSearchParams } from "@/lib/searchParams";
 
 import QuestionCard from "@/components/layout/cards/QuestionCard";
@@ -10,7 +9,6 @@ import LocalSearch from "@/components/layout/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 
 import { ROUTES } from "@/constants/routes";
-import { ErrorResponse } from "@/types/global";
 
 const questions = [
   {
@@ -73,23 +71,30 @@ const questions = [
   },
 ];
 
-const test = async () => {
-  try {
-    return await api.users.getAll();
-  } catch (error) {
-    return handleError(error) as ErrorResponse;
-  }
-};
+// const test = async () => {
+//   try {
+//     const validatedUrl = await ImageUrlSchema.safeParseAsync({
+//       imageUrl: "https://mongoosejs.com/",
+//     });
+//     if (!validatedUrl.success)
+//       throw new ValidationError(validatedUrl.error.flatten().fieldErrors);
+
+//     return validatedUrl;
+//   } catch (error) {
+//     return handleError(error);
+//   }
+// };
 
 export default async function Home({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const response = await test();
-  console.log(response.data);
-
   const { query } = await getSearchParams(searchParams);
+  const session = await auth();
+  console.log(session);
+  // await test();
+  // await getMyIP();
 
   // Convert query to string whether it's a string or an array
   const queryString = Array.isArray(query) ? query[0] : query || "";

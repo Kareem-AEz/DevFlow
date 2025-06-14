@@ -1,4 +1,5 @@
 import { fetchHandler } from "./handlers/fetch";
+import { SignInWithOAuthResponseType } from "./validations";
 
 import { IAccount } from "@/database/account.model";
 import { IUser } from "@/database/user.model";
@@ -25,6 +26,20 @@ const createCrud = <T>(basePath: string) => ({
 });
 
 export const api = {
+  auth: {
+    signInWithOAuth: async ({
+      provider,
+      providerAccountId,
+      user,
+    }: SignInWithOAuthResponseType) =>
+      fetchHandler<SignInWithOAuthResponseType>(
+        `${API_BASE_URL}/api/auth/sign-in-with-oauth`,
+        {
+          method: "POST",
+          body: JSON.stringify({ provider, providerAccountId, user }),
+        },
+      ),
+  },
   users: {
     ...createCrud<IUser>(`${API_BASE_URL}/api/users`),
     getByEmail: async (email: string) =>
@@ -35,7 +50,7 @@ export const api = {
   },
   accounts: {
     ...createCrud<IAccount>(`${API_BASE_URL}/api/accounts`),
-    getByProvider: async (providerAccountId: string) =>
+    getByProviderId: async (providerAccountId: string) =>
       fetchHandler<IAccount>(`${API_BASE_URL}/api/accounts/provider`, {
         method: "POST",
         body: JSON.stringify({ providerAccountId }),

@@ -12,13 +12,13 @@ import { ROUTES } from "@/constants/routes";
 
 function AuthButtons({ isMobileNav }: { isMobileNav?: boolean }) {
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col justify-center gap-3 max-lg:items-center">
       <Link href={ROUTES.SIGN_IN} className="button-primary">
         <Button className="small-medium btn-secondary text-dark400_light900 flex min-h-11 w-full items-center gap-2 rounded-lg px-4 py-3 shadow-none">
           <LogIn className="size-5" />
           <span
             className={cn(
-              "primary-text-gradient",
+              "primary-text-gradient hidden lg:block",
               isMobileNav && "max-lg:hidden",
             )}
           >
@@ -32,7 +32,7 @@ function AuthButtons({ isMobileNav }: { isMobileNav?: boolean }) {
           <UserPlus className="size-5" />
           <span
             className={cn(
-              "primary-text-gradient",
+              "primary-text-gradient hidden lg:block",
               isMobileNav && "max-lg:hidden",
             )}
           >

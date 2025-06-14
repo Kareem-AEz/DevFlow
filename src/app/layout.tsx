@@ -7,6 +7,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { auth } from "@/lib/auth";
 import { generateMetadata } from "@/lib/metadata";
 
+import AuthSuccessToast from "@/components/layout/AuthSuccessToast";
 import Footer from "@/components/layout/Footer";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -50,6 +51,7 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <AuthSuccessToast />
             <NuqsAdapter>{children}</NuqsAdapter>
             <Footer />
             <Toaster />
