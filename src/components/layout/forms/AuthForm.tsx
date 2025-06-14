@@ -1,13 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  DefaultValues,
-  FieldValues,
-  Path,
-  SubmitHandler,
-  useForm,
-} from "react-hook-form";
+import { DefaultValues, FieldValues, Path, useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -31,7 +25,7 @@ interface Field<T> {
 }
 
 interface AuthFormProps<T extends FieldValues> {
-  schema: z.ZodType<T>;
+  schema: z.ZodTypeAny;
   fields: Field<T>[];
   buttonText: {
     default: string;
@@ -55,7 +49,7 @@ export default function AuthForm<T extends FieldValues>({
     ),
   });
 
-  const handleSubmit: SubmitHandler<T> = async () => {};
+  // const handleSubmit: SubmitHandler<T> = async () => {};
 
   return (
     <Form {...form}>

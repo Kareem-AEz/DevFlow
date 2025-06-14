@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 
 import { signIn } from "next-auth/react";
 
@@ -14,6 +14,10 @@ const buttonClassName =
   "background-dark400_light900 body-medium text-dark200_light800 rounded-2 min-h-12 flex-1 px-4 py-3.5 flex items-center justify-center gap-3.5";
 
 function SocialAuthForm() {
+  const [loadingProvider, setLoadingProvider] = useState<
+    "github" | "google" | null
+  >(null);
+
   /*
    * This function handles the sign-in process for the specified provider (GitHub or Google).
    * It uses the `signIn` function from `next-auth/react` to initiate the sign-in process.
@@ -22,12 +26,17 @@ function SocialAuthForm() {
    */
   const handleSignIn = async (provider: "github" | "google") => {
     try {
+      setLoadingProvider(provider);
       await signIn(provider, {
-        redirectTo: ROUTES.HOME,
+        redirectTo: `${ROUTES.HOME}?register=true`,
       });
+      // Don't clear loading state here - let it persist until redirect
       // Success toast removed - will be handled by the callback or session change
     } catch (error) {
       console.error(error);
+
+      // Only clear loading state on error
+      setLoadingProvider(null);
 
       toast.error("Failed to sign in", {
         description:
@@ -43,27 +52,45 @@ function SocialAuthForm() {
       <Button
         className={buttonClassName}
         onClick={() => handleSignIn("github")}
+        disabled={loadingProvider !== null}
       >
-        {/*  eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className="invert-colors size-5 object-contain"
-          src="/icons/github.svg"
-          alt="Github Logo"
-        />
-        <span className="max-lg:hidden">Sign in with Github</span>
+        {loadingProvider === "github" ? (
+          <div className="size-5 animate-spin rounded-full border-2 border-current border-t-transparent" />
+        ) : (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            className="invert-colors size-5 object-contain"
+            src="/icons/github.svg"
+            alt="Github Logo"
+          />
+        )}
+        <span className="">
+          {loadingProvider === "github"
+            ? "Signing in..."
+            : "Sign in with Github"}
+        </span>
       </Button>
 
       <Button
         className={buttonClassName}
         onClick={() => handleSignIn("google")}
+        disabled={loadingProvider !== null}
       >
-        {/*  eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className="size-5 object-contain"
-          src="/icons/google.svg"
-          alt="Github Logo"
-        />
-        <span className="max-lg:hidden">Sign in with Google</span>
+        {loadingProvider === "google" ? (
+          <div className="size-5 animate-spin rounded-full border-2 border-current border-t-transparent" />
+        ) : (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            className="size-5 object-contain"
+            src="/icons/google.svg"
+            alt="Google Logo"
+          />
+        )}
+        <span className="">
+          {loadingProvider === "google"
+            ? "Signing in..."
+            : "Sign in with Google"}
+        </span>
       </Button>
     </div>
   );

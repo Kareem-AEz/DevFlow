@@ -24,17 +24,19 @@ export class ValidationError extends RequestError {
   }
 
   private static formatFieldErrors(fieldErrors: Record<string, string[]>) {
-    return Object.entries(fieldErrors)
-      .map(([field, messages]) => {
-        const fieldName = field.charAt(0).toUpperCase() + field.slice(1);
+    return (
+      Object.entries(fieldErrors)
+        .map(([field, messages]) => {
+          const fieldName = field.charAt(0).toUpperCase() + field.slice(1);
 
-        if (messages[0] === "Required") {
-          return `${fieldName} is required`;
-        }
+          if (messages[0] === "Required") {
+            return `${fieldName} is required`;
+          }
 
-        return messages.join(", and ");
-      })
-      .join(", ");
+          return messages.join(", ");
+        })
+        .join(", ") + "."
+    );
   }
 }
 
