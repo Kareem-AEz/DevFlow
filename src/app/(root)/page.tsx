@@ -2,7 +2,6 @@ import Link from "next/link";
 
 import { auth } from "@/lib/auth";
 import { getUsers } from "@/lib/data-service";
-import { getSearchParams } from "@/lib/searchParams";
 
 import QuestionCard from "@/components/layout/cards/QuestionCard";
 import HomeFilter from "@/components/layout/filters/HomeFilter";
@@ -91,7 +90,7 @@ export default async function Home({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const { query } = await getSearchParams(searchParams);
+  const query = searchParams.query as string;
   const session = await auth();
   const users = await getUsers();
   console.log(users);
