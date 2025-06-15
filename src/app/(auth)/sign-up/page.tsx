@@ -4,14 +4,10 @@ import React from "react";
 
 import Link from "next/link";
 
+import { signUpWithCredentials } from "@/lib/actions/auth.action";
 import { SignUpSchema } from "@/lib/validations";
 
 import AuthForm from "@/components/layout/forms/AuthForm";
-
-export const SIGN_UP_FIELDS = {
-  TYPE: "signup",
-  FIELDS: ["username", "name", "email", "password"],
-};
 
 function SignUp() {
   return (
@@ -44,8 +40,9 @@ function SignUp() {
             defaultValue: "",
           },
         ]}
+        formType={"SIGN_UP"}
         buttonText={{ default: "Sign Up", loading: "Signing Up..." }}
-        onSubmit={(data) => Promise.resolve({ success: true, data })}
+        onSubmit={signUpWithCredentials}
       />
 
       <p className="mt-4">
