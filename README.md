@@ -214,7 +214,14 @@ src/
 
 ## 🤝 Credits & Inspiration
 
-This project was inspired by the amazing work of **Adrian Hajdin** from [JavaScript Mastery](https://jsmastery.pro). His tutorials and approaches to modern web development have been invaluable in shaping this application.
+This project was built by following the Full Stack Web Development course by Adrian Hajdin [from JavaScript Mastery](https://jsmastery.pro/).
+
+The core structure, features, and implementation were guided by the course content, which provided a strong foundation for modern web development practices.
+
+I’ve also made several customizations and improvements to the original project to extend its functionality, enhance the UI/UX, and solidify my own learning through hands-on practice.
+
+Huge thanks to Adrian for his excellent teaching and well-structured tutorials.
+
 
 The NextAuth documentation trilogy? That's my gift to the community—born from countless hours of debugging and discovery.
 
