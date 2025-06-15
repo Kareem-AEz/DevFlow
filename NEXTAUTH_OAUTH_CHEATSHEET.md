@@ -203,7 +203,7 @@ async signIn({ user, profile, account }) {
 ### Custom Profile Processing (OAuth)
 
 ```javascript
-// Customize user data from OAuth provider
+// ✅ CORRECT - Transform OAuth provider data only
 Google({
   async profile(profile) {
     return {
@@ -211,12 +211,64 @@ Google({
       name: profile.name,
       email: profile.email,
       image: profile.picture,
-      role: profile.role ?? "user", // ✨ Add custom role
-      department: profile.department, // ✨ Add custom fields
+      // ✅ Transform available OAuth data
+      firstName: profile.given_name,
+      lastName: profile.family_name,
       isEmailVerified: profile.email_verified,
+      locale: profile.locale,
+      // ❌ DON'T add roles here! OAuth providers don't provide app-specific roles
+      // Use JWT callback for database role lookup instead
     };
   },
 });
+```
+
+### ✅ Correct Role Assignment Pattern
+
+```javascript
+// Step 1: Profile callback - Transform OAuth data only
+Google({
+  async profile(profile) {
+    return {
+      id: profile.sub,
+      name: profile.name,
+      email: profile.email,
+      // ✅ Only transform OAuth provider data
+      firstName: profile.given_name,
+      isEmailVerified: profile.email_verified,
+      // ❌ NO ROLES HERE! They come from your database
+    };
+  },
+});
+
+// Step 2: JWT callback - Database role lookup
+async jwt({ token, account, user }) {
+  if (account) {
+    // ✅ Look up user role from YOUR database
+    const dbUser = await getUserByProvider(
+      account.providerAccountId,
+      account.provider
+    );
+
+    if (dbUser) {
+      token.sub = dbUser.id;
+      token.role = dbUser.role;        // ✅ From YOUR database
+      token.permissions = dbUser.permissions;
+    } else {
+      // New OAuth user - create with default role
+      const newUser = await createUserFromOAuth({
+        ...user,
+        provider: account.provider,
+        providerAccountId: account.providerAccountId,
+        role: "user"  // ✅ YOUR default role
+      });
+
+      token.sub = newUser.id;
+      token.role = newUser.role;
+    }
+  }
+  return token;
+}
 ```
 
 ### Storing OAuth Access Tokens

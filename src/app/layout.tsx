@@ -2,8 +2,6 @@ import { Inter, Space_Grotesk as SpaceGrotesk } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
 
-import { NuqsAdapter } from "nuqs/adapters/next/app";
-
 import { auth } from "@/lib/auth";
 import { generateMetadata } from "@/lib/metadata";
 
@@ -52,7 +50,7 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             <AuthSuccessToast />
-            <NuqsAdapter>{children}</NuqsAdapter>
+            {children}
             <Footer />
             <Toaster />
           </ThemeProvider>

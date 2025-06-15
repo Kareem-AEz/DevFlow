@@ -266,10 +266,26 @@ async authorize(credentials) {
 ### Custom Session Data
 
 ```javascript
-// Add custom data to sessions:
+// ✅ For credentials: roles come from YOUR authorize() function
+Credentials({
+  async authorize(credentials) {
+    // You can do database lookup here or get role from your action
+    const dbUser = await getUserByEmail(credentials.email);
+
+    return {
+      id: dbUser.id,
+      name: dbUser.name,
+      email: dbUser.email,
+      role: dbUser.role,           // ✅ From YOUR database
+      permissions: dbUser.permissions
+    };
+  },
+});
+
+// Then flow the role data through callbacks:
 async jwt({ token, user }) {
   if (user) {
-    token.role = user.role;
+    token.role = user.role;        // ✅ From your authorize() return
     token.permissions = user.permissions;
   }
   return token;
@@ -289,11 +305,19 @@ async jwt({ token, account }) {
   if (account) {
     // Handle both OAuth and credentials consistently
     const identifier = account.type === "credentials"
-      ? token.email!
-      : account.providerAccountId;
+      ? token.email!                 // For credentials: use email
+      : account.providerAccountId;    // For OAuth: use provider ID
 
-    const dbUser = await getUserByProvider(identifier);
-    token.sub = dbUser.id;
+    const dbUser = await getUserByProvider(identifier, account.provider);
+
+    if (dbUser) {
+      token.sub = dbUser.id;
+      token.role = dbUser.role;       // ✅ Role from YOUR database
+      token.permissions = dbUser.permissions;
+    } else {
+      // Handle new user creation for OAuth (credentials already exist)
+      console.warn("User not found in database");
+    }
   }
   return token;
 }
