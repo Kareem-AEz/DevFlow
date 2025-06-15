@@ -4,6 +4,7 @@ import React from "react";
 
 import Link from "next/link";
 
+import { signInWithCredentials } from "@/lib/actions/auth.action";
 import { SignInSchema } from "@/lib/validations";
 
 import AuthForm from "@/components/layout/forms/AuthForm";
@@ -33,7 +34,8 @@ function SignIn() {
           },
         ]}
         buttonText={{ default: "Sign In", loading: "Signing In..." }}
-        onSubmit={(data) => Promise.resolve({ success: true, data })}
+        onSubmit={signInWithCredentials}
+        formType="SIGN_IN"
       />
 
       <p className="mt-4">

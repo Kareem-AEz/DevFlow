@@ -6,7 +6,13 @@ import mongoose from "mongoose";
 import { signIn } from "../auth";
 import { action } from "../handlers/action";
 import handleError from "../handlers/error";
-import { SignUpSchema, SignUpWithCredentialsParamsType } from "../validations";
+import { NotFoundError, UnauthorizedError } from "../http-errors";
+import {
+  SignInSchema,
+  SignInWithCredentialsParamsType,
+  SignUpSchema,
+  SignUpWithCredentialsParamsType,
+} from "../validations";
 
 import Account from "@/database/account.model";
 import User from "@/database/user.model";
@@ -63,16 +69,7 @@ export async function signUpWithCredentials(
 
     await session.commitTransaction();
 
-    try {
-      await signIn("credentials", { email, password, redirect: false });
-    } catch (signInError) {
-      // User was created successfully, but sign-in failed
-      // This is not a critical error since the user can manually sign in
-      console.error(
-        "Sign-in failed after successful registration:",
-        signInError,
-      );
-    }
+    await signIn("credentials", { email, password, redirect: false });
 
     return { success: true };
   } catch (error) {
@@ -81,5 +78,46 @@ export async function signUpWithCredentials(
     return handleError(error) as ErrorResponse;
   } finally {
     await session.endSession();
+  }
+}
+
+export async function signInWithCredentials(
+  params: SignInWithCredentialsParamsType,
+): Promise<ActionResponse> {
+  const validationResult = await action({
+    params,
+    schema: SignInSchema,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const { email, password } = validationResult.params!;
+
+  try {
+    // Check if user exists
+    const existingUser = await User.findOne({ email });
+    if (!existingUser) throw new NotFoundError("User");
+
+    // Check if account exists
+    const existingAccount = await Account.findOne({
+      providerAccountId: email,
+      provider: "credentials",
+    });
+    if (!existingAccount) throw new NotFoundError("Account");
+
+    // Check if password is correct
+    const isValidPassword = await bcrypt.compare(
+      password,
+      existingAccount.password!,
+    );
+    if (!isValidPassword) throw new UnauthorizedError("Invalid credentials");
+
+    await signIn("credentials", { email, password, redirect: false });
+
+    return { success: true };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
   }
 }

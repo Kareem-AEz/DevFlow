@@ -131,3 +131,5 @@ export const SignInWithOAuthSchema = z.object({
 export type SignInWithOAuthResponseType = z.infer<typeof SignInWithOAuthSchema>;
 
 export type SignUpWithCredentialsParamsType = z.infer<typeof SignUpSchema>;
+
+export type SignInWithCredentialsParamsType = z.infer<typeof SignInSchema>;
