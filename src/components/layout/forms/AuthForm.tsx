@@ -1,9 +1,18 @@
 "use client";
 
 import React from "react";
-import { DefaultValues, FieldValues, Path, useForm } from "react-hook-form";
+import {
+  DefaultValues,
+  FieldValues,
+  Path,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form";
+
+import { useRouter } from "next/navigation";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -16,6 +25,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+
+import { ROUTES } from "@/constants/routes";
+import { ActionResponse } from "@/types/global";
 
 interface Field<T> {
   name: keyof T;
@@ -31,7 +43,8 @@ interface AuthFormProps<T extends FieldValues> {
     default: string;
     loading: string;
   };
-  onSubmit: (data: T) => Promise<{ success: boolean }>;
+  onSubmit: (data: T) => Promise<ActionResponse>;
+  formType: "SIGN_UP" | "SIGN_IN";
 }
 
 export default function AuthForm<T extends FieldValues>({
@@ -39,9 +52,10 @@ export default function AuthForm<T extends FieldValues>({
   fields,
   buttonText,
   onSubmit,
+  formType,
 }: AuthFormProps<T>) {
   // 1. Define your form.
-  const form = useForm<T>({
+  const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: fields.reduce(
       (acc, field) => ({ ...acc, [field.name]: field.defaultValue }),
@@ -49,11 +63,32 @@ export default function AuthForm<T extends FieldValues>({
     ),
   });
 
-  // const handleSubmit: SubmitHandler<T> = async () => {};
+  const router = useRouter();
+
+  const handleSubmit: SubmitHandler<T> = async (data) => {
+    const response = (await onSubmit(data)) as ActionResponse;
+
+    if (response?.success) {
+      toast.success(
+        formType === "SIGN_UP"
+          ? "Account created successfully"
+          : "Signed in successfully",
+      );
+
+      router.push(ROUTES.HOME);
+    } else {
+      toast.error(`Error: ${response?.status}`, {
+        description: response?.error?.message,
+      });
+    }
+  };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="mt-10 space-y-5">
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="mt-10 space-y-5"
+      >
         {fields.map((formField) => (
           <FormField
             key={formField.name as string}

@@ -125,17 +125,9 @@ export const SignInWithOAuthSchema = z.object({
     username: z.string().min(1, { message: "Username is required" }),
     email: z.string().email({ message: "Please enter a valid email address" }),
     image: z.string().url({ message: "Please enter a valid image URL" }),
-    // .refine(
-    //   async (url) => {
-    //     const res = await fetch(url, { method: "HEAD" });
-    //     const contentType = res.headers.get("content-type");
-    //     return contentType?.startsWith("image/");
-    //   },
-    //   {
-    //     message: "URL must point to a valid image",
-    //   },
-    // ),
   }),
 });
 
 export type SignInWithOAuthResponseType = z.infer<typeof SignInWithOAuthSchema>;
+
+export type SignUpWithCredentialsParamsType = z.infer<typeof SignUpSchema>;

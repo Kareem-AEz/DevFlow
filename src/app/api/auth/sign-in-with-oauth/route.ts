@@ -19,7 +19,7 @@ export async function POST(request: Request) {
   session.startTransaction();
 
   try {
-    const validatedData = await SignInWithOAuthSchema.safeParseAsync({
+    const validatedData = SignInWithOAuthSchema.safeParse({
       provider,
       providerAccountId,
       user,
@@ -30,7 +30,6 @@ export async function POST(request: Request) {
     }
 
     const { name, username, email, image } = validatedData.data.user;
-    console.log(name, username, email, image);
     const slugifiedUserName = slugify(username, {
       lower: true,
       strict: true,

@@ -59,7 +59,7 @@ function MobileNavigation() {
 
           <div className="flex flex-col gap-3">
             <SheetClose asChild>
-              <AuthButtons />
+              <AuthButtons isMobileNav />
             </SheetClose>
           </div>
         </div>

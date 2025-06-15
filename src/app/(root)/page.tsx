@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { auth } from "@/lib/auth";
+import { getUsers } from "@/lib/data-service";
 import { getSearchParams } from "@/lib/searchParams";
 
 import QuestionCard from "@/components/layout/cards/QuestionCard";
@@ -92,7 +93,10 @@ export default async function Home({
 }) {
   const { query } = await getSearchParams(searchParams);
   const session = await auth();
+  const users = await getUsers();
+  console.log(users);
   console.log(session);
+  // console.log(session);
   // await test();
   // await getMyIP();
 
