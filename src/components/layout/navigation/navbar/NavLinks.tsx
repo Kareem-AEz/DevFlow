@@ -12,9 +12,14 @@ import { SheetClose } from "@/components/ui/sheet";
 
 import { sidebarLinks } from "@/constants/sideBarLinks";
 
-function NavLinks({ isMobileNav = false }: { isMobileNav?: boolean }) {
+function NavLinks({
+  isMobileNav = false,
+  userId,
+}: {
+  isMobileNav?: boolean;
+  userId?: string;
+}) {
   const pathName = usePathname();
-  const userId = "1";
 
   return (
     <>
@@ -23,12 +28,14 @@ function NavLinks({ isMobileNav = false }: { isMobileNav?: boolean }) {
           pathName === link.PATH ||
           (pathName.includes(link.PATH) && link.PATH.length > 1);
 
-        if (link.PATH === "/profile" && userId) {
-          link.PATH = `${link.PATH}/${userId}`;
-        }
+        // 🎯 Compute href dynamically instead of mutating link.PATH
+        const href =
+          link.PATH === "/profile" && userId
+            ? `${link.PATH}/${userId}`
+            : link.PATH;
 
         const LinkComponent = (
-          <Link className="group relative" key={link.PATH} href={link.PATH}>
+          <Link className="group relative" key={link.PATH} href={href}>
             <div
               className={cn(
                 isActive ? "text-light-900" : "text-dark300_light900",

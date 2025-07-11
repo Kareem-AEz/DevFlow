@@ -2,10 +2,16 @@ import React from "react";
 
 import Link from "next/link";
 
+import { auth } from "@/lib/auth";
+
+import UserAvatar from "@/components/ui/UserAvatar";
+
 import MobileNavigation from "./MobileNavigation";
 import ModeToggle from "./mode-toggle";
 
-function Navbar() {
+async function Navbar() {
+  const session = await auth();
+
   return (
     <nav className="flex-between background-light900_dark200 shadow-light-300 fixed z-50 w-full gap-5 p-6 sm:px-12 dark:shadow-2xl">
       <Link className="flex items-center gap-2" href="/">
@@ -24,6 +30,13 @@ function Navbar() {
 
       <div className="flex-between gap-5">
         <ModeToggle />
+        {session && (
+          <UserAvatar
+            userId={session.user?.id ?? ""}
+            name={session.user?.name ?? ""}
+            image={session.user?.image ?? ""}
+          />
+        )}
 
         <MobileNavigation />
       </div>
