@@ -2,6 +2,8 @@ import React from "react";
 
 import Link from "next/link";
 
+import { auth } from "@/lib/auth";
+
 import {
   Sheet,
   SheetClose,
@@ -11,12 +13,16 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import SignOutButton from "@/components/ui/SignOutButton";
 
 import AuthButtons from "../../forms/AuthButtons";
 
 import NavLinks from "./NavLinks";
 
-function MobileNavigation() {
+async function MobileNavigation() {
+  const session = await auth();
+  const userId = session?.user?.id;
+
   return (
     <Sheet>
       <SheetTrigger aria-label="Open menu">
@@ -53,13 +59,13 @@ function MobileNavigation() {
         <div className="mx-3 flex h-[calc(100vh-80px)] flex-col justify-between gap-6 overflow-y-auto pt-16">
           <SheetClose asChild>
             <section className="flex h-full flex-col">
-              <NavLinks isMobileNav />
+              <NavLinks isMobileNav userId={userId} />
             </section>
           </SheetClose>
 
-          <div className="flex flex-col gap-3">
+          <div className="mb-8 flex flex-col gap-3">
             <SheetClose asChild>
-              <AuthButtons isMobileNav />
+              {!session ? <AuthButtons isMobileNav /> : <SignOutButton />}
             </SheetClose>
           </div>
         </div>

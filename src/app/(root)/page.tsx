@@ -90,7 +90,7 @@ export default async function Home({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const query = searchParams.query as string;
+  const query = (await searchParams).query as string;
   const session = await auth();
   const users = await getUsers();
   console.log(users);
