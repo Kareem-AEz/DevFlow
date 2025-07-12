@@ -60,6 +60,8 @@ export const AskQuestionSchema = z.object({
     .max(3, { message: "You can only add up to 3 tags" }),
 });
 
+export type AskQuestionSchemaType = z.infer<typeof AskQuestionSchema>;
+
 // User schema
 export const UserSchema = z.object({
   name: z
