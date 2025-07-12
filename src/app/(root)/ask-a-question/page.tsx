@@ -1,8 +1,16 @@
 import React from "react";
 
+import { redirect } from "next/navigation";
+
+import { auth } from "@/lib/auth";
+
 import QuestionForm from "@/components/layout/forms/QuestionForm";
 
-function AskAQuestion() {
+async function AskAQuestion() {
+  const session = await auth();
+
+  if (!session?.user) return redirect("/sign-in");
+
   return (
     <>
       <h1 className="h1-bold text-dark100_light900">Ask a question</h1>

@@ -1,11 +1,16 @@
 "use client";
 
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
+
+import { useRouter } from "next/navigation";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion } from "framer-motion";
+import { toast } from "sonner";
 import { z } from "zod";
 
+import { createQuestion } from "@/lib/actions/question.action";
 import { AskQuestionSchema } from "@/lib/validations";
 
 import Editor from "@/components/layout/editor/Editor";
@@ -23,9 +28,14 @@ import { Input } from "@/components/ui/input";
 
 import TagCard from "../cards/TagCard";
 
+import { ROUTES } from "@/constants/routes";
+
 const MotionTagCard = motion.create(TagCard);
 
 const QuestionForm = () => {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
   const form = useForm<z.infer<typeof AskQuestionSchema>>({
     resolver: zodResolver(AskQuestionSchema),
     defaultValues: {
@@ -80,8 +90,19 @@ const QuestionForm = () => {
     }
   }
 
-  function onSubmit(data: z.infer<typeof AskQuestionSchema>) {
-    console.log(data);
+  async function onSubmit(data: z.infer<typeof AskQuestionSchema>) {
+    startTransition(async () => {
+      const question = await createQuestion({ params: data });
+
+      if (question.success) {
+        if (question.data) {
+          toast.success("Question created successfully");
+          router.push(`${ROUTES.QUESTION(question.data._id)}`);
+        }
+      } else {
+        toast.error(question.error?.message || "Something went wrong");
+      }
+    });
   }
 
   return (
@@ -195,8 +216,9 @@ const QuestionForm = () => {
           <Button
             type="submit"
             className="primary-gradient !text-light-900 w-fit"
+            disabled={isPending}
           >
-            Ask a question
+            {isPending ? "Creating question..." : "Ask a question"}
           </Button>
         </div>
       </form>

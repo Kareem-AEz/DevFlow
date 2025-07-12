@@ -49,3 +49,7 @@ type APIErrorResponse = NextResponse<ErrorResponse>;
 type APIResponse<T = null> =
   | NextResponse<SuccessResponse<T>>
   | APIErrorResponse;
+
+//
+type Params = Promise<Record<string, string | string[] | undefined>>;
+type SearchParams = Promise<Record<string, string | string[] | undefined>>;
