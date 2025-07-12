@@ -10,7 +10,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { createQuestion } from "@/lib/actions/question.action";
+import { createQuestion, editQuestion } from "@/lib/actions/question.action";
 import { AskQuestionSchema } from "@/lib/validations";
 
 import Editor from "@/components/layout/editor/Editor";
@@ -29,19 +29,30 @@ import { Input } from "@/components/ui/input";
 import TagCard from "../cards/TagCard";
 
 import { ROUTES } from "@/constants/routes";
+import { Question } from "@/types/global";
 
 const MotionTagCard = motion.create(TagCard);
 
-const QuestionForm = () => {
+type QuestionFormProps =
+  | {
+      isEdit: false;
+      question?: never;
+    }
+  | {
+      isEdit: true;
+      question: Question;
+    };
+
+const QuestionForm = ({ isEdit = false, question }: QuestionFormProps) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof AskQuestionSchema>>({
     resolver: zodResolver(AskQuestionSchema),
     defaultValues: {
-      title: "",
-      content: "",
-      tags: [],
+      title: question?.title || "",
+      content: question?.content || "",
+      tags: question?.tags.map((tag) => tag.name) || [],
     },
   });
 
@@ -92,15 +103,23 @@ const QuestionForm = () => {
 
   async function onSubmit(data: z.infer<typeof AskQuestionSchema>) {
     startTransition(async () => {
-      const question = await createQuestion({ params: data });
+      const response = isEdit
+        ? await editQuestion({
+            params: { ...data, questionId: question?._id || "" },
+          })
+        : await createQuestion({ params: data });
 
-      if (question.success) {
-        if (question.data) {
-          toast.success("Question created successfully");
-          router.push(`${ROUTES.QUESTION(question.data._id)}`);
+      if (response.success) {
+        if (response.data) {
+          toast.success(
+            isEdit
+              ? "Question updated successfully"
+              : "Question created successfully",
+          );
+          router.push(`${ROUTES.QUESTION(response.data._id)}`);
         }
       } else {
-        toast.error(question.error?.message || "Something went wrong");
+        toast.error(response.error?.message || "Something went wrong");
       }
     });
   }
@@ -218,7 +237,13 @@ const QuestionForm = () => {
             className="primary-gradient !text-light-900 w-fit"
             disabled={isPending}
           >
-            {isPending ? "Creating question..." : "Ask a question"}
+            {isPending
+              ? isEdit
+                ? "Updating question..."
+                : "Creating question..."
+              : isEdit
+                ? "Update question"
+                : "Ask a question"}
           </Button>
         </div>
       </form>

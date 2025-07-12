@@ -19,6 +19,7 @@ type Question = {
   readonly _id: string;
   title: string;
   tags: Tag[];
+  content: string;
   author: author;
   createdAt: Date;
   answers: number;
@@ -51,5 +52,5 @@ type APIResponse<T = null> =
   | APIErrorResponse;
 
 //
-type Params = Promise<Record<string, string | string[] | undefined>>;
-type SearchParams = Promise<Record<string, string | string[] | undefined>>;
+type Params = Promise<Record<string, string>>;
+type SearchParams = Promise<Record<string, string>>;
