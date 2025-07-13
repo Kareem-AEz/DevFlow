@@ -1,7 +1,6 @@
 import Link from "next/link";
 
-import { auth } from "@/lib/auth";
-import { getUsers } from "@/lib/data-service";
+import { getQuestions } from "@/lib/actions/question.action";
 
 import QuestionCard from "@/components/layout/cards/QuestionCard";
 import HomeFilter from "@/components/layout/filters/HomeFilter";
@@ -9,67 +8,7 @@ import LocalSearch from "@/components/layout/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 
 import { ROUTES } from "@/constants/routes";
-
-const questions = [
-  {
-    _id: "1",
-    title: "How to use Next.js?",
-    description: "I want to learn how to use Next.js",
-    tags: [
-      {
-        _id: "1",
-        name: "nextjs",
-      },
-      {
-        _id: "2",
-        name: "react",
-      },
-    ],
-    author: {
-      _id: "1",
-      name: "John Doe",
-      image: "https://github.com/shadcn.png",
-    },
-    upvotes: 10,
-    views: 100,
-    answers: 10,
-    createdAt: new Date(),
-  },
-  {
-    _id: "2",
-    title: "How to use Tailwind CSS?",
-    description: "I want to learn how to use Tailwind CSS",
-    tags: [{ _id: "1", name: "tailwindcss" }],
-    author: {
-      _id: "2",
-      name: "Jane Doe",
-      image: "https://github.com/shadcn.png",
-    },
-    upvotes: 12,
-    views: 22,
-    answers: 10,
-    createdAt: new Date(),
-  },
-  {
-    _id: "3",
-    title: "How to implement WebSockets in a Node.js application?",
-    description:
-      "I'm building a real-time chat application and need guidance on implementing WebSockets efficiently in Node.js with Express.",
-    tags: [
-      { _id: "1", name: "nodejs" },
-      { _id: "2", name: "express" },
-    ],
-    author: {
-      _id: "2",
-      name: "Jane Doe",
-      image: "https://github.com/shadcn.png",
-    },
-    upvotes: 12,
-    views: 22,
-    answers: 10,
-    createdAt: new Date(`2025-02-30T22:00:00.000Z`),
-  },
-];
+import { SearchParams } from "@/types/global";
 
 // const test = async () => {
 //   try {
@@ -88,23 +27,18 @@ const questions = [
 export default async function Home({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: SearchParams;
 }) {
-  const query = (await searchParams).query as string;
-  const session = await auth();
-  const users = await getUsers();
-  console.log(users);
-  console.log(session);
-  // console.log(session);
-  // await test();
-  // await getMyIP();
+  const { page, pageSize, query, filter } = await searchParams;
 
-  // Convert query to string whether it's a string or an array
-  const queryString = Array.isArray(query) ? query[0] : query || "";
+  const { success, data, error } = await getQuestions({
+    page: Number(page) || 1,
+    pageSize: Number(pageSize) || 10,
+    query: query || "",
+    filter: filter || "",
+  });
 
-  const filteredQuestions = questions.filter((question) =>
-    question.title.toLowerCase().includes(queryString.toLowerCase()),
-  );
+  const { questions } = data || {};
 
   return (
     <>
@@ -129,12 +63,25 @@ export default async function Home({
       {/*   */}
       <HomeFilter />
       {/*  */}
-      <p></p>
-      <div className="mt-10 flex w-full flex-col gap-6">
-        {filteredQuestions.map((question) => (
-          <QuestionCard key={question._id} question={question} />
-        ))}
-      </div>
+      {success ? (
+        <div className="mt-10 flex w-full flex-col gap-6">
+          {questions && questions.length > 0 ? (
+            questions.map((question) => (
+              <QuestionCard key={question._id} question={question} />
+            ))
+          ) : (
+            <div className="mt-10 flex w-full items-center justify-center">
+              <p className="text-dark400_light700">No questions found</p>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="mt-10 flex w-full items-center justify-center">
+          <p className="text-dark400_light700">
+            {error?.message || "Something went wrong"}
+          </p>
+        </div>
+      )}
     </>
   );
 }

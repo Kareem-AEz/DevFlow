@@ -142,6 +142,18 @@ export const SignInWithOAuthSchema = z.object({
   }),
 });
 
+export const PaginatedSearchParamsSchema = z.object({
+  page: z.number().int().positive().optional().default(1),
+  pageSize: z.number().int().positive().default(10),
+  query: z.string().optional(),
+  filter: z.string().optional(),
+  sortBy: z.string().optional(),
+});
+
+export type PaginatedSearchParamsType = z.infer<
+  typeof PaginatedSearchParamsSchema
+>;
+
 export type SignInWithOAuthResponseType = z.infer<typeof SignInWithOAuthSchema>;
 
 export type SignUpWithCredentialsParamsType = z.infer<typeof SignUpSchema>;

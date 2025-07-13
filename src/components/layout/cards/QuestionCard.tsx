@@ -9,6 +9,7 @@ import Metric from "../Metric";
 import TagCard from "./TagCard";
 
 import { ROUTES } from "@/constants/routes";
+import { Question } from "@/types/global";
 
 const QuestionCard = ({
   question: { _id, title, author, createdAt, answers, upvotes, views, tags },

@@ -17,9 +17,10 @@ export const getDevIconClassName = (techName: string) => {
   }
 };
 
-export const getTimestamp = (date: Date): string => {
+export const getTimestamp = (createdAt: Date): string => {
   const now = new Date();
-  const diff = now.getTime() - date.getTime();
+  const createdAtDate = new Date(createdAt);
+  const diff = now.getTime() - createdAtDate.getTime();
 
   // Convert time differences to appropriate units
   const seconds = Math.floor(diff / 1000);
