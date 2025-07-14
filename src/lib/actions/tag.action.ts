@@ -1,6 +1,8 @@
 import { FilterQuery } from "mongoose";
 
 import {
+  GetTagQuestionsSchema,
+  GetTagQuestionsSchemaType,
   PaginatedSearchParamsSchema,
   PaginatedSearchParamsType,
 } from "@/lib/validations";
@@ -8,8 +10,13 @@ import {
 import { action } from "../handlers/action";
 import handleError from "../handlers/error";
 
-import { Tag } from "@/database";
-import { ActionResponse, ErrorResponse, Tag as TagType } from "@/types/global";
+import { Question, Tag } from "@/database";
+import {
+  ActionResponse,
+  ErrorResponse,
+  Question as QuestionType,
+  Tag as TagType,
+} from "@/types/global";
 
 export const getTags = async (
   params: PaginatedSearchParamsType,
@@ -81,6 +88,69 @@ export const getTags = async (
       success: true,
       data: {
         tags: JSON.parse(JSON.stringify(tags)),
+        isNext,
+      },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+};
+
+export const getTagQuestions = async (
+  params: GetTagQuestionsSchemaType,
+): Promise<
+  ActionResponse<{
+    tag: TagType;
+    questions: QuestionType[];
+    isNext: boolean;
+  }>
+> => {
+  const validatedResults = await action({
+    params,
+    schema: GetTagQuestionsSchema,
+  });
+
+  if (validatedResults instanceof Error) {
+    return handleError(validatedResults) as ErrorResponse;
+  }
+
+  const { tagId, page = 1, pageSize = 10, query } = validatedResults.params!;
+
+  const skip = (Number(page) - 1) * Number(pageSize);
+  const limit = Number(pageSize);
+
+  try {
+    const tag = await Tag.findById(tagId);
+
+    if (!tag) {
+      throw new Error("Tag not found");
+    }
+
+    const filterQuery: FilterQuery<typeof Question> = {
+      tags: { $in: [tagId] },
+    };
+
+    if (query) {
+      filterQuery.title = { $regex: query, $options: "i" };
+    }
+
+    const totalQuestions = await Question.countDocuments(filterQuery);
+    const questions = await Question.find(filterQuery)
+      .skip(skip)
+      .limit(limit)
+      .select("_id title views answers upvotes downvotes author createdAt")
+      .populate([
+        { path: "author", select: "name  image" },
+        { path: "tags", select: "name" },
+      ]);
+
+    const isNext = totalQuestions > skip + limit;
+
+    return {
+      success: true,
+      data: {
+        tag: JSON.parse(JSON.stringify(tag)),
+        questions: JSON.parse(JSON.stringify(questions)),
         isNext,
       },
     };

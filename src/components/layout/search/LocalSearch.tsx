@@ -16,8 +16,9 @@ import { Input } from "@/components/ui/input";
 interface LocalSearchProps {
   imgSrc: string;
   placeholder: string;
-  className?: string;
   route: string;
+  className?: string;
+  iconPosition?: "left" | "right";
 }
 
 const LocalSearch = ({
@@ -25,6 +26,7 @@ const LocalSearch = ({
   placeholder,
   className,
   route,
+  iconPosition = "left",
 }: LocalSearchProps) => {
   const searchParams = useSearchParams();
   const query = searchParams.get("query") ?? "";
@@ -118,19 +120,21 @@ const LocalSearch = ({
               <X className="size-5" />
             </motion.button>
           ) : (
-            <motion.img
-              key="search-icon"
-              src={imgSrc}
-              alt="search"
-              width={24}
-              height={24}
-              className="invert-colors size-6"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ type: "spring", bounce: 0.4, duration: 0.5 }}
-              aria-hidden="true"
-            />
+            iconPosition === "left" && (
+              <motion.img
+                key="search-icon"
+                src={imgSrc}
+                alt="search"
+                width={24}
+                height={24}
+                className="invert-colors size-6"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ type: "spring", bounce: 0.4, duration: 0.5 }}
+                aria-hidden="true"
+              />
+            )
           )}
         </AnimatePresence>
       </div>
@@ -143,6 +147,21 @@ const LocalSearch = ({
         className="paragraph-regular no-focus placeholder:text-dark200_light700 text-dark400_light700 border-none !bg-transparent shadow-none outline-none"
         autoComplete="off"
       />
+      {iconPosition === "right" && (
+        <motion.img
+          key="search-icon"
+          src={imgSrc}
+          alt="search"
+          width={16}
+          height={16}
+          className="invert-colors size-4"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          transition={{ type: "spring", bounce: 0.4, duration: 0.5 }}
+          aria-hidden="true"
+        />
+      )}
       <div className="text-dark300_light700 border-dark-400/10 bg-dark-300/10 hidden items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium sm:flex">
         <AnimatePresence mode="wait" initial={false}>
           {searchQuery ? (
