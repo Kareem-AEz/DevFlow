@@ -6,7 +6,6 @@ import { auth } from "@/lib/auth";
 import { generateMetadata } from "@/lib/metadata";
 
 import AuthSuccessToast from "@/components/layout/AuthSuccessToast";
-import Footer from "@/components/layout/Footer";
 import { Toaster } from "@/components/ui/sonner";
 
 import "./globals.css";
@@ -51,7 +50,7 @@ export default async function RootLayout({
           >
             <AuthSuccessToast />
             {children}
-            <Footer />
+            {/* <Footer /> */}
             <Toaster />
           </ThemeProvider>
           <link
