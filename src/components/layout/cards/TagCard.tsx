@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { Badge } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 import { cn, getDevIconClassName, getTechDescription } from "@/lib/utils";
 
@@ -30,8 +30,10 @@ const TagCard = ({
   isButton,
   handleRemove,
 }: Props) => {
-  const iconClass = getDevIconClassName(name);
-  const iconDescription = getTechDescription(name);
+  // 🚨 Safeguard against undefined/empty name to prevent hydration issues
+  const safeName = name || "";
+  const iconClass = getDevIconClassName(safeName);
+  const iconDescription = getTechDescription(safeName);
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -42,7 +44,7 @@ const TagCard = ({
       <Badge className="subtle-medium background-light800_dark300 text-light400_light500 flex flex-row gap-2 rounded-md border-none px-4 py-2 uppercase">
         <div className="flex-center space-x-2">
           <i className={`${iconClass} text-sm`}></i>
-          <span>{name}</span>
+          <span>{safeName}</span>
         </div>
 
         {remove && (
@@ -80,7 +82,9 @@ const TagCard = ({
       <article className="background-light900_dark200 light-border flex w-full flex-col rounded-2xl border px-8 py-10 sm:w-[260px]">
         <div className="flex items-center justify-between gap-3">
           <div className="background-light800_dark400 w-fit rounded-sm px-5 py-1.5">
-            <p className="paragraph-semibold text-dark300_light900">{name}</p>
+            <p className="paragraph-semibold text-dark300_light900">
+              {safeName}
+            </p>
           </div>
           <i className={cn(iconClass, "text-2xl")} aria-hidden="true" />
         </div>

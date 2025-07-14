@@ -212,7 +212,9 @@ const QuestionForm = ({ isEdit = false, question }: QuestionFormProps) => {
                               duration: 0.6,
                               bounce: 0.3,
                             }}
+                            _id={tag}
                             name={tag}
+                            compact
                             remove
                             isButton
                             handleRemove={() => handleRemoveTag(tag, field)}
