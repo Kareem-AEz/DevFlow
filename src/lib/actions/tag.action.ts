@@ -35,7 +35,12 @@ export const getTags = async (
     return handleError(validatedResults) as ErrorResponse;
   }
 
-  const { page = 1, pageSize = 10, query, filter } = validatedResults.params!;
+  const {
+    page = 1,
+    pageSize = 10,
+    query,
+    filter = "popular",
+  } = validatedResults.params!;
 
   const skip = (Number(page) - 1) * Number(pageSize);
   const limit = Number(pageSize);
