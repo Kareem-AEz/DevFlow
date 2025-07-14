@@ -6,8 +6,10 @@ import QuestionCard from "@/components/layout/cards/QuestionCard";
 import HomeFilter from "@/components/layout/filters/HomeFilter";
 import LocalSearch from "@/components/layout/search/LocalSearch";
 import { Button } from "@/components/ui/button";
+import DataRenderer from "@/components/ui/DataRenderer";
 
 import { ROUTES } from "@/constants/routes";
+import { STATES } from "@/constants/states";
 import { SearchParams } from "@/types/global";
 
 // const test = async () => {
@@ -38,6 +40,8 @@ export default async function Home({
     filter: filter || "",
   });
 
+  console.log(data);
+
   const { questions } = data || {};
 
   return (
@@ -63,7 +67,7 @@ export default async function Home({
       {/*   */}
       <HomeFilter />
       {/*  */}
-      {success ? (
+      {/* {success ? (
         <div className="mt-10 flex w-full flex-col gap-6">
           {questions && questions.length > 0 ? (
             questions.map((question) => (
@@ -81,7 +85,18 @@ export default async function Home({
             {error?.message || "Something went wrong"}
           </p>
         </div>
-      )}
+      )} */}
+      <DataRenderer
+        success={success}
+        error={error}
+        data={questions}
+        empty={STATES.EMPTY_QUESTION}
+        render={(questions) =>
+          questions.map((question) => (
+            <QuestionCard key={question._id} question={question} />
+          ))
+        }
+      />
     </>
   );
 }

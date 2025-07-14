@@ -63,7 +63,7 @@ const TagCard = forwardRef<HTMLDivElement, TagCardProps>(
         {content}
       </button>
     ) : (
-      <Link href={ROUTES.TAGS(name)} className="flex justify-between gap-2">
+      <Link href={ROUTES.TAG(name)} className="flex justify-between gap-2">
         {content}
       </Link>
     );
