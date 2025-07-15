@@ -168,3 +168,20 @@ export type SignInWithOAuthResponseType = z.infer<typeof SignInWithOAuthSchema>;
 export type SignUpWithCredentialsParamsType = z.infer<typeof SignUpSchema>;
 
 export type SignInWithCredentialsParamsType = z.infer<typeof SignInSchema>;
+
+export const IncrementQuestionViewsSchema = z.object({
+  questionId: z.string().min(1, { message: "Question ID is required" }),
+});
+
+export type IncrementQuestionViewsSchemaType = z.infer<
+  typeof IncrementQuestionViewsSchema
+>;
+
+export const AnswerSchema = z.object({
+  content: z
+    .string()
+    .min(100, { message: "Content must be at least 100 characters" })
+    .max(1200, { message: "Content must be at most 1200 characters" }),
+});
+
+export type AnswerSchemaType = z.infer<typeof AnswerSchema>;
