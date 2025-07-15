@@ -185,3 +185,9 @@ export const AnswerSchema = z.object({
 });
 
 export type AnswerSchemaType = z.infer<typeof AnswerSchema>;
+
+export const CreateAnswerParamsSchema = AnswerSchema.extend({
+  questionId: z.string().min(1, { message: "Question ID is required" }),
+});
+
+export type CreateAnswerParamsType = z.infer<typeof CreateAnswerParamsSchema>;
