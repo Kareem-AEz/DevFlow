@@ -112,6 +112,12 @@
   @apply bg-light-700 dark:bg-dark-300;
 }
 
+.hash-span {
+  margin-top: -140px;
+  padding-bottom: 140px;
+  display: block;
+}
+
 @utility background-light800_dark300 {
   @apply bg-light-800! dark:bg-dark-300!;
 }

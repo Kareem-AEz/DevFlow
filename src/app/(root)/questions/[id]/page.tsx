@@ -11,6 +11,7 @@ import {
 } from "@/lib/actions/question.action";
 import { formatNumber, getTimestamp } from "@/lib/utils";
 
+import AllAnswers from "@/components/layout/answers/All-Answers";
 import TagCard from "@/components/layout/cards/TagCard";
 import Preview from "@/components/layout/editor/Preview";
 import AnswerForm from "@/components/layout/forms/AnswerForm";
@@ -37,7 +38,11 @@ const QuestionDetails = async ({ params }: { params: Params }) => {
     return redirect("/404");
   }
 
-  const { success: answersSuccess, data: answersData } = await getAnswers({
+  const {
+    success: answersSuccess,
+    data: answersData,
+    error: answersError,
+  } = await getAnswers({
     questionId: id,
     page: 1,
     pageSize: 10,
@@ -112,6 +117,15 @@ const QuestionDetails = async ({ params }: { params: Params }) => {
           />
         ))}
       </div>
+
+      <section className="my-10">
+        <AllAnswers
+          data={answersData?.answers}
+          success={answersSuccess}
+          error={answersError}
+          totalAnswers={answersData?.totalAnswers || 0}
+        />
+      </section>
 
       <section className="my-5">
         <AnswerForm questionId={id} />

@@ -48,4 +48,10 @@ export const STATES = {
       href: ROUTES.COLLECTIONS,
     },
   },
+
+  EMPTY_ANSWERS: {
+    title: "The Answer board is empty, make it rain 💦 with your answer!",
+    message:
+      "Looks like there are no answers to display. Be the first to answer.",
+  },
 };

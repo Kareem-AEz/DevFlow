@@ -94,9 +94,11 @@ function RightSidebar() {
             return (
               <TagCard
                 key={tag.id}
+                _id={tag.id.toString()}
                 name={tag.name}
                 questions={tag.questions}
                 showCount
+                compact
               />
             );
           })}
