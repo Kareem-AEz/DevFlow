@@ -2,12 +2,17 @@ import React from "react";
 
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { after } from "next/server";
 
-import { getQuestion } from "@/lib/actions/question.action";
+import {
+  getQuestion,
+  incrementQuestionViews,
+} from "@/lib/actions/question.action";
 import { formatNumber, getTimestamp } from "@/lib/utils";
 
 import TagCard from "@/components/layout/cards/TagCard";
 import Preview from "@/components/layout/editor/Preview";
+import AnswerForm from "@/components/layout/forms/AnswerForm";
 import Metric from "@/components/layout/Metric";
 import UserAvatar from "@/components/ui/UserAvatar";
 
@@ -16,6 +21,12 @@ import { Params, Tag } from "@/types/global";
 
 const QuestionDetails = async ({ params }: { params: Params }) => {
   const { id } = await params;
+
+  after(async () => {
+    incrementQuestionViews({
+      params: { questionId: id },
+    });
+  });
 
   const {
     success,
@@ -95,6 +106,10 @@ const QuestionDetails = async ({ params }: { params: Params }) => {
           />
         ))}
       </div>
+
+      <section className="my-5">
+        <AnswerForm />
+      </section>
     </>
   );
 };
