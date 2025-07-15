@@ -27,6 +27,14 @@ type Question = {
   views: number;
 };
 
+// Answer type
+type AnswerType = {
+  readonly _id: string;
+  content: string;
+  author: author;
+  createdAt: Date;
+};
+
 // Action response type
 type ActionResponse<T = null> = {
   success: boolean;
