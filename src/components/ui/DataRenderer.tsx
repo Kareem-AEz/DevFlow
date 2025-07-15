@@ -14,7 +14,11 @@ interface Props<T> {
     details?: Record<string, string[]>;
   };
   data?: T[] | null | undefined;
-  empty: typeof STATES.DEFAULT_EMPTY;
+  empty: {
+    title: string;
+    message: string;
+    button?: { text: string; href: string };
+  };
   render: (data: T[]) => React.ReactNode;
 }
 
