@@ -108,7 +108,7 @@ const QuestionDetails = async ({ params }: { params: Params }) => {
       </div>
 
       <section className="my-5">
-        <AnswerForm />
+        <AnswerForm questionId={id} />
       </section>
     </>
   );

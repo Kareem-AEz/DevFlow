@@ -1,14 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 
 import Image from "next/image";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 import z from "zod";
 
+import { createAnswer } from "@/lib/actions/answer.actions";
 import { AnswerSchema } from "@/lib/validations";
 
 import { Button } from "@/components/ui/button";
@@ -23,8 +25,8 @@ import {
 
 import Editor from "../editor/Editor";
 
-function AnswerForm() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+function AnswerForm({ questionId }: { questionId: string }) {
+  const [isAnswering, startTransition] = useTransition();
   const [isAISubmitting, setIsAISubmitting] = useState(false);
 
   // 1. Define your form.
@@ -37,7 +39,19 @@ function AnswerForm() {
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof AnswerSchema>) {
-    console.log(values);
+    startTransition(async () => {
+      const { success, error } = await createAnswer({
+        questionId,
+        content: values.content,
+      });
+
+      if (success) {
+        toast.success("Answer created successfully");
+        form.reset();
+      } else {
+        toast.error(error?.message);
+      }
+    });
   }
 
   return (
@@ -87,7 +101,7 @@ function AnswerForm() {
           />
           <div className="flex justify-end">
             <Button type="submit" className="primary-gradient w-fit">
-              {isSubmitting ? (
+              {isAnswering ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   <span>Submitting...</span>
