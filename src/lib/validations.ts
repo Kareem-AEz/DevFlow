@@ -191,3 +191,9 @@ export const CreateAnswerParamsSchema = AnswerSchema.extend({
 });
 
 export type CreateAnswerParamsType = z.infer<typeof CreateAnswerParamsSchema>;
+
+export const GetAnswersParamsSchema = PaginatedSearchParamsSchema.extend({
+  questionId: z.string().min(1, { message: "Question ID is required" }),
+});
+
+export type GetAnswersParamsType = z.infer<typeof GetAnswersParamsSchema>;

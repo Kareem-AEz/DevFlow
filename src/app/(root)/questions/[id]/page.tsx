@@ -4,6 +4,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 
+import { getAnswers } from "@/lib/actions/answer.actions";
 import {
   getQuestion,
   incrementQuestionViews,
@@ -28,11 +29,7 @@ const QuestionDetails = async ({ params }: { params: Params }) => {
     });
   });
 
-  const {
-    success,
-    data: question,
-    error,
-  } = await getQuestion({
+  const { success, data: question } = await getQuestion({
     params: { questionId: id },
   });
 
@@ -40,7 +37,16 @@ const QuestionDetails = async ({ params }: { params: Params }) => {
     return redirect("/404");
   }
 
-  const { author, createdAt, answers, views, tags, content, title } = question;
+  const { success: answersSuccess, data: answersData } = await getAnswers({
+    questionId: id,
+    page: 1,
+    pageSize: 10,
+    filter: "latest",
+  });
+
+  console.log(answersData);
+
+  const { author, createdAt, views, tags, content, title, answers } = question;
 
   return (
     <>
