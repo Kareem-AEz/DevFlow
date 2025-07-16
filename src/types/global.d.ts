@@ -24,6 +24,7 @@ type Question = {
   createdAt: Date;
   answers: number;
   upvotes: number;
+  downvotes: number;
   views: number;
 };
 
