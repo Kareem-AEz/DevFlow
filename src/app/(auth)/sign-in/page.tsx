@@ -9,11 +9,6 @@ import { SignInSchema } from "@/lib/validations";
 
 import AuthForm from "@/components/layout/forms/AuthForm";
 
-export const SIGN_IN_FIELDS = {
-  TYPE: "signin",
-  FIELDS: ["email", "password"],
-};
-
 function SignIn() {
   return (
     <>

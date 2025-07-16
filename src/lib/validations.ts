@@ -181,7 +181,7 @@ export const AnswerSchema = z.object({
   content: z
     .string()
     .min(100, { message: "Content must be at least 100 characters" })
-    .max(1200, { message: "Content must be at most 1200 characters" }),
+    .max(1500, { message: "Content must be at most 1500 characters" }),
 });
 
 export type AnswerSchemaType = z.infer<typeof AnswerSchema>;
@@ -197,3 +197,17 @@ export const GetAnswersParamsSchema = PaginatedSearchParamsSchema.extend({
 });
 
 export type GetAnswersParamsType = z.infer<typeof GetAnswersParamsSchema>;
+
+export const AIAnswerSchema = z.object({
+  question: z
+    .string()
+    .min(1, { message: "Question must be at least 5 characters" })
+    .max(150, { message: "Question must be at most 150 characters" }),
+
+  content: z
+    .string()
+    .min(100, { message: "Content must be at least 100 characters" }),
+  userAnswer: z.string().optional(),
+});
+
+export type AIAnswerSchemaType = z.infer<typeof AIAnswerSchema>;

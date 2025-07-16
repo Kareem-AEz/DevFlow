@@ -3,9 +3,9 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { Badge } from "@/components/ui/badge";
-
 import { cn, getDevIconClassName, getTechDescription } from "@/lib/utils";
+
+import { Badge } from "@/components/ui/badge";
 
 import { ROUTES } from "@/constants/routes";
 

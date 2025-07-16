@@ -4,6 +4,7 @@ import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
@@ -11,6 +12,7 @@ import { toast } from "sonner";
 import z from "zod";
 
 import { createAnswer } from "@/lib/actions/answer.actions";
+import { api } from "@/lib/api";
 import { AnswerSchema } from "@/lib/validations";
 
 import { Button } from "@/components/ui/button";
@@ -25,9 +27,20 @@ import {
 
 import Editor from "../editor/Editor";
 
-function AnswerForm({ questionId }: { questionId: string }) {
+interface AnswerFormProps {
+  questionId: string;
+  questionTitle: string;
+  questionContent: string;
+}
+
+function AnswerForm({
+  questionId,
+  questionTitle,
+  questionContent,
+}: AnswerFormProps) {
   const [isAnswering, startTransition] = useTransition();
   const [isAISubmitting, setIsAISubmitting] = useState(false);
+  const { data: session } = useSession();
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof AnswerSchema>>({
@@ -46,12 +59,65 @@ function AnswerForm({ questionId }: { questionId: string }) {
       });
 
       if (success) {
-        toast.success("Answer created successfully");
         form.reset();
+        toast.success("Answer created successfully");
       } else {
         toast.error(error?.message);
       }
     });
+  }
+
+  async function generateAnswer() {
+    if (!session?.user) {
+      toast.error("Please login to generate an answer");
+      return;
+    }
+
+    setIsAISubmitting(true);
+
+    try {
+      const userAnswer = form.getValues("content");
+
+      const { success, data } = await api.ai.answers(
+        questionTitle,
+        questionContent,
+        userAnswer,
+      );
+
+      console.log({ data });
+
+      if (!success) {
+        // 🚨 AI failed to deliver the goods! Let's let the user know with a little humor.
+        toast.error("Error generating answer", {
+          description:
+            "Looks like our AI took a coffee break. Try again in a moment!",
+        });
+        return;
+      }
+
+      if (data?.text) {
+        const formattedAnswer = data.text
+          .toString()
+          .replace(/<br>/g, "\n") // Use newlines instead of spaces for better formatting
+          .trim();
+
+        // ✨ Set the generated content to the form field
+        form.reset();
+        form.setValue("content", formattedAnswer);
+        form.trigger("content");
+
+        toast.success("AI answer generated successfully!");
+      } else {
+        toast.error("No content received from AI");
+      }
+    } catch (error) {
+      toast.error("Something went wrong", {
+        description:
+          error instanceof Error ? error.message : "Unknown error occurred",
+      });
+    } finally {
+      setIsAISubmitting(false);
+    }
   }
 
   return (
@@ -63,6 +129,7 @@ function AnswerForm({ questionId }: { questionId: string }) {
         <Button
           className="btn light-border-2 text-primary-500 dark:text-primary-500 gap-1.5 rounded-md border px-4 py-2.5 shadow-none"
           disabled={isAISubmitting}
+          onClick={() => generateAnswer()}
         >
           {isAISubmitting ? (
             <>

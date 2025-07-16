@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
 
+import { RefMDEditor } from "@uiw/react-md-editor";
 import rehypeSanitize from "rehype-sanitize";
 
 import "@uiw/react-md-editor/markdown-editor.css";
@@ -22,10 +23,12 @@ const Editor = ({
   value,
   onChange,
   enterBreak = false,
+  ref,
 }: {
   value: string;
   onChange: (value: string) => void;
   enterBreak?: boolean;
+  ref?: React.Ref<RefMDEditor> | undefined;
 }) => {
   // Start with a default theme and update after mounting
   const [colorMode, setColorMode] = useState<string>("light");
@@ -56,6 +59,7 @@ const Editor = ({
         textareaProps={{
           placeholder: "Write your question here...",
         }}
+        ref={ref}
         previewOptions={{
           rehypePlugins: [[rehypeSanitize]],
         }}
