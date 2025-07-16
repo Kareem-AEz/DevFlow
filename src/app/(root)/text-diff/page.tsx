@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 
 // 🎯 Simple diff algorithm that compares texts word by word
 interface DiffItem {

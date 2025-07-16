@@ -32,7 +32,7 @@ const formatResponse = (
 const handleError = (error: unknown, responseType: ResponseType = "server") => {
   if (error instanceof RequestError) {
     logger.error(
-      { err: error },
+      { error },
       `${responseType.toUpperCase()} Error: ${error.message}`,
     );
 
@@ -49,10 +49,7 @@ const handleError = (error: unknown, responseType: ResponseType = "server") => {
       error.flatten().fieldErrors as Record<string, string[]>,
     );
 
-    logger.error(
-      { err: error },
-      `Validation Error: ${validationError.message}`,
-    );
+    logger.error({ error }, `Validation Error: ${validationError.message}`);
 
     return formatResponse(
       responseType,

@@ -1,8 +1,11 @@
+import { LanguageModelUsage } from "ai";
+
 import { fetchHandler } from "./handlers/fetch";
 import { SignInWithOAuthResponseType } from "./validations";
 
 import { IAccount } from "@/database/account.model";
 import { IUser } from "@/database/user.model";
+import { APIResponse } from "@/types/global";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
@@ -54,6 +57,22 @@ export const api = {
       fetchHandler<IAccount>(`${API_BASE_URL}/api/accounts/provider`, {
         method: "POST",
         body: JSON.stringify({ providerAccountId }),
+      }),
+  },
+  ai: {
+    answers: async (question: string, content: string, userAnswer: string) =>
+      fetchHandler<
+        APIResponse<{
+          text: string;
+          usage: LanguageModelUsage;
+          reasoning: string | undefined;
+          providerMetadata: unknown;
+          sources: unknown;
+        }>
+      >(`${API_BASE_URL}/api/ai/answers`, {
+        method: "POST",
+        body: JSON.stringify({ question, content, userAnswer }),
+        timeout: 100000,
       }),
   },
 };
