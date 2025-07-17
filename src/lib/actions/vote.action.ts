@@ -1,5 +1,7 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+
 import mongoose, { ClientSession } from "mongoose";
 
 import { action } from "../handlers/action";
@@ -15,6 +17,7 @@ import {
   UpdateVoteCountSchemaType,
 } from "../validations";
 
+import { ROUTES } from "@/constants/routes";
 import { Answer, Question, Vote } from "@/database";
 import { ActionResponse, ErrorResponse } from "@/types/global";
 
@@ -102,6 +105,15 @@ export async function createVote(
           {
             targetId,
             targetType,
+            voteType: existingVote.voteType,
+            change: -1,
+          },
+          session,
+        );
+        await updateVoteCount(
+          {
+            targetId,
+            targetType,
             voteType,
             change: 1,
           },
@@ -133,6 +145,7 @@ export async function createVote(
 
     await session.commitTransaction();
 
+    revalidatePath(ROUTES.QUESTION(targetId));
     return { success: true };
   } catch (error) {
     await session.abortTransaction();

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -26,13 +26,6 @@ import { Params, Tag } from "@/types/global";
 const QuestionDetails = async ({ params }: { params: Params }) => {
   const { id } = await params;
 
-  const { success: hasVotedSuccess, data: hasVotedData } = await hasVoted({
-    targetId: id,
-    targetType: "question",
-  });
-
-  console.log(hasVotedSuccess, hasVotedData);
-
   after(async () => {
     incrementQuestionViews({
       params: { questionId: id },
@@ -58,7 +51,10 @@ const QuestionDetails = async ({ params }: { params: Params }) => {
     filter: "latest",
   });
 
-  console.log(answersData);
+  const hasVotedPromise = hasVoted({
+    targetId: id,
+    targetType: "question",
+  });
 
   const { author, createdAt, views, tags, content, title, answers } = question;
 
@@ -81,12 +77,15 @@ const QuestionDetails = async ({ params }: { params: Params }) => {
           </div>
 
           <div className="flex justify-end">
-            <Votes
-              upvotes={question.upvotes}
-              hasUpvoted={true}
-              downvotes={question.downvotes}
-              hasDownvoted={false}
-            />
+            <Suspense fallback={<div>Loading...</div>}>
+              <Votes
+                upvotes={question.upvotes}
+                downvotes={question.downvotes}
+                targetId={id}
+                targetType="question"
+                hasVotedPromise={hasVotedPromise}
+              />
+            </Suspense>
           </div>
         </div>
 
