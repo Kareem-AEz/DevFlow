@@ -233,3 +233,17 @@ export const UpdateVoteCountSchema = CreateVoteSchema.extend({
 });
 
 export type UpdateVoteCountSchemaType = z.infer<typeof UpdateVoteCountSchema>;
+
+export const HasVotedSchema = CreateVoteSchema.pick({
+  targetId: true,
+  targetType: true,
+});
+
+export type HasVotedSchemaType = z.infer<typeof HasVotedSchema>;
+
+export const HasVotedResponseSchema = z.object({
+  hasUpvoted: z.boolean(),
+  hasDownvoted: z.boolean(),
+});
+
+export type HasVotedResponseType = z.infer<typeof HasVotedResponseSchema>;

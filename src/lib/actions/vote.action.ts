@@ -8,6 +8,9 @@ import { UnauthorizedError } from "../http-errors";
 import {
   CreateVoteSchema,
   CreateVoteSchemaType,
+  HasVotedResponseType,
+  HasVotedSchema,
+  HasVotedSchemaType,
   UpdateVoteCountSchema,
   UpdateVoteCountSchemaType,
 } from "../validations";
@@ -136,5 +139,45 @@ export async function createVote(
     return handleError(error) as ErrorResponse;
   } finally {
     await session.endSession();
+  }
+}
+
+export async function hasVoted(
+  params: HasVotedSchemaType,
+): Promise<ActionResponse<HasVotedResponseType>> {
+  const validationResult = await action({
+    params,
+    schema: HasVotedSchema,
+    authorize: true,
+  });
+
+  if (validationResult instanceof Error)
+    return handleError(validationResult) as ErrorResponse;
+
+  const { targetId, targetType } = validationResult.params!;
+  const userId = validationResult.session?.user?.id;
+
+  try {
+    const vote = await Vote.findOne({
+      author: userId,
+      id: targetId,
+      type: targetType,
+    });
+
+    if (!vote)
+      return {
+        success: false,
+        data: { hasUpvoted: false, hasDownvoted: false },
+      };
+
+    return {
+      success: true,
+      data: {
+        hasUpvoted: vote.voteType === "upvote",
+        hasDownvoted: vote.voteType === "downvote",
+      },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
   }
 }
