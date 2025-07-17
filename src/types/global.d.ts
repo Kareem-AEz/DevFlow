@@ -34,7 +34,9 @@ type AnswerType = {
   content: string;
   author: author;
   createdAt: Date;
-};
+  upvotes: number;
+  downvotes: number;
+1};
 
 // Action response type
 type ActionResponse<T = null> = {
