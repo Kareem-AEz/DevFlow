@@ -8,11 +8,13 @@ import { ValidationError } from "@/lib/http-errors";
 import dbConnect from "@/lib/mongoose";
 import { SignInWithOAuthSchema } from "@/lib/validations";
 
-import Account from "@/database/account.model";
+import Account, { IAccountDoc } from "@/database/account.model";
 import User from "@/database/user.model";
-import { APIErrorResponse } from "@/types/global";
+import { APIErrorResponse, APIResponse } from "@/types/global";
 
-export async function POST(request: Request) {
+export async function POST(
+  request: Request,
+): Promise<APIResponse<IAccountDoc>> {
   const { provider, providerAccountId, user } = await request.json();
   await dbConnect();
   const session = await mongoose.startSession();

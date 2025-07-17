@@ -17,7 +17,7 @@ async function AskAQuestion() {
 
       <div className="mt-9 flex flex-col gap-9 md:flex-row">
         <div className="flex w-full flex-1 flex-col gap-9">
-          <QuestionForm />
+          <QuestionForm isEdit={false} />
         </div>
       </div>
     </>

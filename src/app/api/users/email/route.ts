@@ -5,11 +5,13 @@ import { NotFoundError, ValidationError } from "@/lib/http-errors";
 import dbConnect from "@/lib/mongoose";
 import { UserSchema } from "@/lib/validations";
 
-import User from "@/database/user.model";
-import { APIErrorResponse } from "@/types/global";
+import User, { IUserDoc } from "@/database/user.model";
+import { APIErrorResponse, APIResponse } from "@/types/global";
 
 // POST /api/users/email - Find user by email (email in request body for security)
-export async function POST(request: Request) {
+export async function POST(
+  request: Request,
+): Promise<APIResponse<IUserDoc | null>> {
   const { email } = await request.json();
 
   try {

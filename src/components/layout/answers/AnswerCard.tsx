@@ -17,7 +17,7 @@ const AnswerCard = ({ _id, author, content, createdAt }: AnswerType) => {
       <div className="mb-5 flex flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
         <div className="flex flex-1 items-start gap-1 sm:items-center">
           <UserAvatar
-            id={author._id}
+            userId={author._id}
             name={author.name}
             imageUrl={author.image}
             className="size-5 rounded-full object-cover max-sm:mt-2"

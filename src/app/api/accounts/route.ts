@@ -5,10 +5,10 @@ import { ForbiddenError } from "@/lib/http-errors";
 import dbConnect from "@/lib/mongoose";
 import { AccountSchema } from "@/lib/validations";
 
-import Account from "@/database/account.model";
-import { APIErrorResponse } from "@/types/global";
+import Account, { IAccountDoc } from "@/database/account.model";
+import { APIErrorResponse, APIResponse } from "@/types/global";
 
-export async function GET() {
+export async function GET(): Promise<APIResponse<IAccountDoc[]>> {
   try {
     await dbConnect();
 
@@ -23,7 +23,9 @@ export async function GET() {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(
+  request: Request,
+): Promise<APIResponse<IAccountDoc>> {
   try {
     await dbConnect();
 

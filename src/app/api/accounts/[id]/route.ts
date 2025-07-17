@@ -7,14 +7,14 @@ import { NotFoundError, ValidationError } from "@/lib/http-errors";
 import dbConnect from "@/lib/mongoose";
 import { AccountSchema } from "@/lib/validations";
 
-import Account from "@/database/account.model";
-import { APIErrorResponse } from "@/types/global";
+import Account, { IAccountDoc } from "@/database/account.model";
+import { APIErrorResponse, APIResponse } from "@/types/global";
 
 // GET /api/accounts/:id
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
-) {
+): Promise<APIResponse<IAccountDoc>> {
   try {
     const { id } = await params;
     if (!id || !isValidObjectId(id)) throw new NotFoundError("Account");
@@ -39,7 +39,7 @@ export async function GET(
 export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
-) {
+): Promise<APIResponse<IAccountDoc>> {
   try {
     const { id } = await params;
     if (!id || !isValidObjectId(id)) throw new NotFoundError("Account");
@@ -64,7 +64,7 @@ export async function DELETE(
 export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
-) {
+): Promise<APIResponse<IAccountDoc>> {
   try {
     const { id } = await params;
     if (!id || !isValidObjectId(id)) throw new NotFoundError("Account");

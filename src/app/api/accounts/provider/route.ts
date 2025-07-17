@@ -5,11 +5,13 @@ import { NotFoundError, ValidationError } from "@/lib/http-errors";
 import dbConnect from "@/lib/mongoose";
 import { AccountSchema } from "@/lib/validations";
 
-import Account from "@/database/account.model";
-import { APIErrorResponse } from "@/types/global";
+import Account, { IAccountDoc } from "@/database/account.model";
+import { APIErrorResponse, APIResponse } from "@/types/global";
 
 // POST /api/accounts/provider
-export async function POST(request: NextRequest) {
+export async function POST(
+  request: NextRequest,
+): Promise<APIResponse<IAccountDoc>> {
   try {
     const { providerAccountId } = await request.json();
 

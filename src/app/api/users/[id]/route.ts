@@ -7,14 +7,14 @@ import { NotFoundError, ValidationError } from "@/lib/http-errors";
 import dbConnect from "@/lib/mongoose";
 import { UserSchema } from "@/lib/validations";
 
-import User from "@/database/user.model";
-import { APIErrorResponse } from "@/types/global";
+import User, { IUserDoc } from "@/database/user.model";
+import { APIErrorResponse, APIResponse } from "@/types/global";
 
 // GET /api/users/:id
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
-) {
+): Promise<APIResponse<IUserDoc>> {
   try {
     const { id } = await params;
     if (!id || !isValidObjectId(id)) throw new NotFoundError("User");
@@ -39,7 +39,7 @@ export async function GET(
 export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
-) {
+): Promise<APIResponse<IUserDoc>> {
   try {
     const { id } = await params;
     if (!id || !isValidObjectId(id)) throw new NotFoundError("User");
@@ -64,7 +64,7 @@ export async function DELETE(
 export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
-) {
+): Promise<APIResponse<IUserDoc>> {
   try {
     const { id } = await params;
     if (!id || !isValidObjectId(id)) throw new NotFoundError("User");
