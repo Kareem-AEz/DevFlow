@@ -9,6 +9,7 @@ import {
   getQuestion,
   incrementQuestionViews,
 } from "@/lib/actions/question.action";
+import { hasVoted } from "@/lib/actions/vote.action";
 import { formatNumber, getTimestamp } from "@/lib/utils";
 
 import AllAnswers from "@/components/layout/answers/All-Answers";
@@ -24,6 +25,13 @@ import { Params, Tag } from "@/types/global";
 
 const QuestionDetails = async ({ params }: { params: Params }) => {
   const { id } = await params;
+
+  const { success: hasVotedSuccess, data: hasVotedData } = await hasVoted({
+    targetId: id,
+    targetType: "question",
+  });
+
+  console.log(hasVotedSuccess, hasVotedData);
 
   after(async () => {
     incrementQuestionViews({
