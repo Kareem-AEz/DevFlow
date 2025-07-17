@@ -41,7 +41,7 @@ const Votes = ({ upvotes, downvotes, hasUpvoted, hasDownvoted }: Props) => {
       });
 
       //
-    } catch (error) {
+    } catch {
       toast.error("Oops! The vote gremlins struck again!", {
         description:
           "Your vote got lost in the digital mail. Give it another shot!",

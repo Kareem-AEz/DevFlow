@@ -211,3 +211,25 @@ export const AIAnswerSchema = z.object({
 });
 
 export type AIAnswerSchemaType = z.infer<typeof AIAnswerSchema>;
+
+export const CreateVoteSchema = z.object({
+  targetId: z.string().min(1, { message: "Target ID is required" }),
+  targetType: z.enum(["question", "answer"], {
+    message: "Target type must be either question or answer",
+  }),
+  voteType: z.enum(["upvote", "downvote"], {
+    message: "Vote type must be either upvote or downvote",
+  }),
+});
+
+export type CreateVoteSchemaType = z.infer<typeof CreateVoteSchema>;
+
+export const UpdateVoteCountSchema = CreateVoteSchema.extend({
+  change: z
+    .number()
+    .int()
+    .min(-1, { message: "Change must be -1 or 1" })
+    .max(1, { message: "Change must be -1 or 1" }),
+});
+
+export type UpdateVoteCountSchemaType = z.infer<typeof UpdateVoteCountSchema>;

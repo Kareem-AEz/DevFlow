@@ -34,7 +34,7 @@ async function Navbar() {
           <UserAvatar
             userId={session.user?.id ?? ""}
             name={session.user?.name ?? ""}
-            image={session.user?.image ?? ""}
+            imageUrl={session.user?.image ?? ""}
           />
         )}
 

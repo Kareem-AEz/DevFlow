@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ROUTES } from "@/constants/routes";
 
 interface Props {
-  id: string;
+  userId: string;
   name: string;
   imageUrl?: string | null;
   className?: string;
@@ -18,7 +18,7 @@ interface Props {
 }
 
 const UserAvatar = ({
-  id,
+  userId,
   name,
   imageUrl,
   className = "h-9 w-9",
@@ -32,7 +32,7 @@ const UserAvatar = ({
     .slice(0, 2);
 
   return (
-    <Link href={ROUTES.PROFILE(id)}>
+    <Link href={ROUTES.PROFILE(userId)}>
       <Avatar className={className}>
         {imageUrl ? (
           <Image

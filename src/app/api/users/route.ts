@@ -5,9 +5,10 @@ import { ValidationError } from "@/lib/http-errors";
 import dbConnect from "@/lib/mongoose";
 import { UserSchema } from "@/lib/validations";
 
-import User from "@/database/user.model";
+import User, { IUserDoc } from "@/database/user.model";
+import { APIErrorResponse, APIResponse } from "@/types/global";
 
-export async function GET() {
+export async function GET(): Promise<APIResponse<IUserDoc[]>> {
   try {
     await dbConnect();
 
@@ -15,11 +16,11 @@ export async function GET() {
 
     return NextResponse.json({ success: true, data: users }, { status: 200 });
   } catch (error) {
-    return handleError(error, "api");
+    return handleError(error, "api") as APIErrorResponse;
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: Request): Promise<APIResponse<IUserDoc>> {
   try {
     await dbConnect();
 
@@ -45,6 +46,6 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, data: newUser }, { status: 201 });
   } catch (error) {
-    return handleError(error, "api");
+    return handleError(error, "api") as APIErrorResponse;
   }
 }

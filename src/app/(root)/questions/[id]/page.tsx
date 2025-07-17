@@ -60,7 +60,7 @@ const QuestionDetails = async ({ params }: { params: Params }) => {
         <div className="flex w-full flex-col-reverse justify-between">
           <div className="flex items-center justify-start gap-1">
             <UserAvatar
-              id={author._id}
+              userId={author._id}
               name={author.name}
               className="size-[22px]"
               fallbackClassName="text-[10px]"
