@@ -76,14 +76,16 @@ export async function getUsers(params: PaginatedSearchParamsType): Promise<
     const users = await User.find(filterQuery)
       .sort(sortCriteria)
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .select("_id name username email bio image location portfolio reputation")
+      .lean();
 
     const isNext = totalUsers > skip + limit;
 
     return {
       success: true,
       data: {
-        users,
+        users: JSON.parse(JSON.stringify(users)),
         isNext,
       },
     };
