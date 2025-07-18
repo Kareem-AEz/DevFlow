@@ -247,3 +247,9 @@ export const HasVotedResponseSchema = z.object({
 });
 
 export type HasVotedResponseType = z.infer<typeof HasVotedResponseSchema>;
+
+export const CollectionBaseSchema = z.object({
+  questionId: z.string().min(1, { message: "Question ID is required" }),
+});
+
+export type CollectionBaseSchemaType = z.infer<typeof CollectionBaseSchema>;

@@ -24,9 +24,7 @@ async function Community({
     filter,
   });
 
-  const { users, isNext } = data || {};
-
-  console.log(users);
+  const { users } = data || {};
 
   return (
     <div>
