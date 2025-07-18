@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { after } from "next/server";
 
 import { getAnswers } from "@/lib/actions/answer.actions";
+import { hasSavedQuestion } from "@/lib/actions/collection.action";
 import {
   getQuestion,
   incrementQuestionViews,
@@ -17,6 +18,7 @@ import TagCard from "@/components/layout/cards/TagCard";
 import Preview from "@/components/layout/editor/Preview";
 import AnswerForm from "@/components/layout/forms/AnswerForm";
 import Metric from "@/components/layout/Metric";
+import SaveQuestion from "@/components/layout/question/SaveQuestion";
 import Votes from "@/components/layout/votes/Votes";
 import UserAvatar from "@/components/ui/UserAvatar";
 
@@ -55,6 +57,9 @@ const QuestionDetails = async ({ params }: { params: Params }) => {
     targetId: id,
     targetType: "question",
   });
+  const hasSavedPromise = hasSavedQuestion({
+    questionId: id,
+  });
 
   const { author, createdAt, views, tags, content, title, answers } = question;
 
@@ -85,6 +90,10 @@ const QuestionDetails = async ({ params }: { params: Params }) => {
                 targetType="question"
                 hasVotedPromise={hasVotedPromise}
               />
+            </Suspense>
+
+            <Suspense fallback={<div>Loading...</div>}>
+              <SaveQuestion questionId={id} hasSaved={hasSavedPromise} />
             </Suspense>
           </div>
         </div>
