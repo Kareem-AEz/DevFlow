@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 type Tag = {
   readonly _id: string;
   name: string;
+  questions: number;
 };
 
 // Author type

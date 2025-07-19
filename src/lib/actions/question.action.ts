@@ -432,3 +432,21 @@ export async function incrementQuestionViews({
     return handleError(error) as ErrorResponse;
   }
 }
+
+export async function getHotQuestions(): Promise<
+  ActionResponse<Pick<QuestionType, "_id" | "title">[]>
+> {
+  try {
+    const questions = await Question.find({})
+      .sort({ views: -1, upvotes: -1 })
+      .select("_id title")
+      .limit(5);
+
+    return {
+      success: true,
+      data: JSON.parse(JSON.stringify(questions)),
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+}

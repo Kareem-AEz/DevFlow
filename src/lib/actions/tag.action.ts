@@ -163,3 +163,21 @@ export const getTagQuestions = async (
     return handleError(error) as ErrorResponse;
   }
 };
+
+export const getPopularTags = async (): Promise<
+  ActionResponse<Pick<TagType, "_id" | "name" | "questions">[]>
+> => {
+  try {
+    const tags = await Tag.find({})
+      .sort({ questions: -1 })
+      .select("_id name questions")
+      .limit(5);
+
+    return {
+      success: true,
+      data: JSON.parse(JSON.stringify(tags)),
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+};
