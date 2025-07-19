@@ -9,6 +9,7 @@ import {
   getUserAnswers,
   getUserProfile,
   getUserQuestions,
+  getUserTopTags,
 } from "@/lib/actions/user.actions";
 import { auth } from "@/lib/auth";
 
@@ -23,6 +24,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import UserAvatar from "@/components/ui/UserAvatar";
 
 import { STATES } from "@/constants/states";
+import TagCard from "@/components/layout/cards/TagCard";
 
 async function Profile({
   params,
@@ -86,6 +88,18 @@ async function Profile({
     page: Number(page),
     pageSize: Number(pageSize),
   });
+
+  const {
+    data: userTopTags,
+    success: userTopTagsSuccess,
+    error: userTopTagsError,
+  } = await getUserTopTags({
+    userId: id,
+    page: Number(page),
+    pageSize: Number(pageSize),
+  });
+
+  const { tags } = userTopTags!;
 
   return (
     <>
@@ -210,7 +224,21 @@ async function Profile({
 
         <div className="flex w-full min-w-[250px] flex-1 flex-col max-lg:hidden">
           <h3 className="h3-bold text-dark200_light900">Top Tags</h3>
-          <div className="mt-7 flex flex-col gap-4"></div>
+          <div className="mt-7 flex flex-col gap-4">
+            <DataRenderer
+              empty={STATES.DEFAULT_EMPTY}
+              success={userTopTagsSuccess}
+              error={userTopTagsError}
+              data={tags}
+              render={(tags) => (
+                <div className="flex flex-col gap-6">
+                  {tags.map((tag) => (
+                    <TagCard key={tag._id} {...tag} compact showCount />
+                  ))}
+                </div>
+              )}
+            />
+          </div>
         </div>
       </section>
     </>
