@@ -6,6 +6,8 @@ import { action } from "../handlers/action";
 import handleError from "../handlers/error";
 import { NotFoundError } from "../http-errors";
 import {
+  GetUserAnswersSchema,
+  GetUserAnswersSchemaType,
   GetUserProfileSchema,
   GetUserProfileSchemaType,
   GetUserQuestionsSchema,
@@ -18,6 +20,7 @@ import { Answer, Question } from "@/database";
 import User, { IUser } from "@/database/user.model";
 import {
   ActionResponse,
+  AnswerType,
   ErrorResponse,
   Question as QuestionType,
   User as UserType,
@@ -174,6 +177,51 @@ export async function getUserQuestions(
       success: true,
       data: {
         questions: JSON.parse(JSON.stringify(questions)),
+        isNext,
+      },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+}
+
+export async function getUserAnswers(params: GetUserAnswersSchemaType): Promise<
+  ActionResponse<{
+    answers: AnswerType[];
+    isNext: boolean;
+  }>
+> {
+  const validationResult = await action({
+    params,
+    schema: GetUserAnswersSchema,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const { userId, page = 1, pageSize = 10 } = validationResult.params!;
+  const skip = (Number(page) - 1) * Number(pageSize);
+  const limit = Number(pageSize);
+
+  try {
+    const totalAnswers = await Answer.countDocuments({
+      author: userId,
+      isDeleted: false,
+    });
+    const answers = await Answer.find({ author: userId })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .populate("author", "_id name username image")
+      .lean();
+
+    const isNext = totalAnswers > skip + limit;
+
+    return {
+      success: true,
+      data: {
+        answers: JSON.parse(JSON.stringify(answers)),
         isNext,
       },
     };
