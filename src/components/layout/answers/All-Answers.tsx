@@ -2,8 +2,11 @@ import React from "react";
 
 import DataRenderer from "@/components/ui/DataRenderer";
 
+import CommonFilter from "../filters/CommonFilter";
+
 import AnswerCard from "./AnswerCard";
 
+import { AnswerFilters } from "@/constants/filters";
 import { STATES } from "@/constants/states";
 import { ActionResponse, AnswerType } from "@/types/global";
 
@@ -19,7 +22,10 @@ function AllAnswers({ data, success, error, totalAnswers }: Props) {
           {totalAnswers} {totalAnswers === 1 ? "Answer" : "Answers"}
         </h3>
 
-        <p>Filters</p>
+        <CommonFilter
+          filters={AnswerFilters}
+          otherClasses="min-h-[56px] sm:min-w-[170px]"
+        />
       </div>
 
       <DataRenderer
