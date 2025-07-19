@@ -1,6 +1,6 @@
 "use server";
 
-import { FilterQuery } from "mongoose";
+import { FilterQuery, isValidObjectId } from "mongoose";
 
 import { action } from "../handlers/action";
 import handleError from "../handlers/error";
@@ -14,23 +14,15 @@ import {
 
 import { Answer, Question } from "@/database";
 import User, { IUser } from "@/database/user.model";
-import { ActionResponse, ErrorResponse } from "@/types/global";
-
-interface User {
-  _id: string;
-  name: string;
-  username: string;
-  email: string;
-  bio?: string;
-  image?: string;
-  location?: string;
-  portfolio?: string;
-  reputation?: number;
-}
+import {
+  ActionResponse,
+  ErrorResponse,
+  User as UserType,
+} from "@/types/global";
 
 export async function getUsers(params: PaginatedSearchParamsType): Promise<
   ActionResponse<{
-    users: User[];
+    users: UserType[];
     isNext: boolean;
   }>
 > {
@@ -100,7 +92,7 @@ export async function getUsers(params: PaginatedSearchParamsType): Promise<
 
 export async function getUserProfile(params: GetUserProfileSchemaType): Promise<
   ActionResponse<{
-    user: User;
+    user: UserType;
     totalQuestions: number;
     totalAnswers: number;
   }>
@@ -117,6 +109,8 @@ export async function getUserProfile(params: GetUserProfileSchemaType): Promise<
   const { userId } = validationResult.params!;
 
   try {
+    if (!isValidObjectId(userId)) throw new Error("Invalid user ID");
+
     const user = await User.findById(userId).select(
       "_id name username email bio image location portfolio reputation",
     );
