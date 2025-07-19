@@ -4,6 +4,7 @@ import { getUsers } from "@/lib/actions/user.actions";
 
 import UserCard from "@/components/layout/cards/UserCard";
 import CommonFilter from "@/components/layout/filters/CommonFilter";
+import Pagination from "@/components/layout/Pagination";
 import LocalSearch from "@/components/layout/search/LocalSearch";
 import DataRenderer from "@/components/ui/DataRenderer";
 
@@ -26,7 +27,7 @@ async function Community({
     filter,
   });
 
-  const { users } = data || {};
+  const { users, isNext } = data || {};
 
   return (
     <div>
@@ -60,6 +61,8 @@ async function Community({
           );
         }}
       />
+
+      <Pagination page={page} isNext={isNext || false} />
     </div>
   );
 }

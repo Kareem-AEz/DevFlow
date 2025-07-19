@@ -156,6 +156,8 @@ const QuestionDetails = async ({
           success={answersSuccess}
           error={answersError}
           totalAnswers={answersData?.totalAnswers || 0}
+          page={Number(page) || 1}
+          isNext={answersData?.hasNextPage || false}
         />
       </section>
 

@@ -3,6 +3,7 @@ import React from "react";
 import DataRenderer from "@/components/ui/DataRenderer";
 
 import CommonFilter from "../filters/CommonFilter";
+import Pagination from "../Pagination";
 
 import AnswerCard from "./AnswerCard";
 
@@ -12,9 +13,18 @@ import { ActionResponse, AnswerType } from "@/types/global";
 
 interface Props extends ActionResponse<AnswerType[]> {
   totalAnswers: number;
+  page: number;
+  isNext: boolean;
 }
 
-function AllAnswers({ data, success, error, totalAnswers }: Props) {
+function AllAnswers({
+  data,
+  success,
+  error,
+  totalAnswers,
+  page,
+  isNext,
+}: Props) {
   return (
     <div className="mt-11">
       <div className="flex items-center justify-between">
@@ -37,6 +47,8 @@ function AllAnswers({ data, success, error, totalAnswers }: Props) {
           answers.map((answer) => <AnswerCard key={answer._id} {...answer} />)
         }
       />
+
+      <Pagination page={page} isNext={isNext || false} />
     </div>
   );
 }

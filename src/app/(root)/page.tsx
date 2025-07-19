@@ -5,6 +5,7 @@ import { getQuestions } from "@/lib/actions/question.action";
 import QuestionCard from "@/components/layout/cards/QuestionCard";
 import CommonFilter from "@/components/layout/filters/CommonFilter";
 import HomeFilter from "@/components/layout/filters/HomeFilter";
+import Pagination from "@/components/layout/Pagination";
 import LocalSearch from "@/components/layout/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import DataRenderer from "@/components/ui/DataRenderer";
@@ -42,7 +43,7 @@ export default async function Home({
     filter: filter || "",
   });
 
-  const { questions } = data || {};
+  const { questions, isNext } = data || {};
 
   return (
     <>
@@ -103,6 +104,8 @@ export default async function Home({
           ))
         }
       />
+
+      <Pagination page={page} isNext={isNext || false} />
     </>
   );
 }
