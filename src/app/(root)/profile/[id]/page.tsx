@@ -5,9 +5,14 @@ import { notFound } from "next/navigation";
 
 import dayjs from "dayjs";
 
-import { getUserProfile, getUserQuestions } from "@/lib/actions/user.actions";
+import {
+  getUserAnswers,
+  getUserProfile,
+  getUserQuestions,
+} from "@/lib/actions/user.actions";
 import { auth } from "@/lib/auth";
 
+import AnswerCard from "@/components/layout/answers/AnswerCard";
 import QuestionCard from "@/components/layout/cards/QuestionCard";
 import Pagination from "@/components/layout/Pagination";
 import Stats from "@/components/layout/search/Stats";
@@ -39,7 +44,17 @@ async function Profile({
     error: userProfileError,
   } = await getUserProfile({ userId: id });
 
-  if (!userProfileSuccess)
+  const {
+    data: userAnswers,
+    success: userAnswersSuccess,
+    error: userAnswersError,
+  } = await getUserAnswers({
+    userId: id,
+    page: Number(page),
+    pageSize: Number(pageSize),
+  });
+
+  if (!userProfileSuccess || !userAnswersSuccess)
     return (
       <div>
         <div className="h1-bold text-dark100_light900">
@@ -173,15 +188,29 @@ async function Profile({
             value="top-answers"
             className="mt-5 flex w-full flex-col gap-6"
           >
-            List of Answers
+            <DataRenderer
+              empty={STATES.DEFAULT_EMPTY}
+              success={userAnswersSuccess}
+              error={userAnswersError}
+              data={userAnswers?.answers}
+              render={(answers) => (
+                <div className="flex flex-col gap-6">
+                  {answers.map((answer) => (
+                    <AnswerCard key={answer._id} {...answer} />
+                  ))}
+                </div>
+              )}
+            />
+            <Pagination
+              page={Number(page)}
+              isNext={userAnswers?.isNext || false}
+            />
           </TabsContent>
         </Tabs>
 
         <div className="flex w-full min-w-[250px] flex-1 flex-col max-lg:hidden">
           <h3 className="h3-bold text-dark200_light900">Top Tags</h3>
-          <div className="mt-7 flex flex-col gap-4">
-            <p>List of Tags</p>
-          </div>
+          <div className="mt-7 flex flex-col gap-4"></div>
         </div>
       </section>
     </>
