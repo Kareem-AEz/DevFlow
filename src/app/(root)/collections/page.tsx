@@ -2,6 +2,7 @@ import { getSavedCollections } from "@/lib/actions/collection.action";
 
 import QuestionCard from "@/components/layout/cards/QuestionCard";
 import CommonFilter from "@/components/layout/filters/CommonFilter";
+import Pagination from "@/components/layout/Pagination";
 import LocalSearch from "@/components/layout/search/LocalSearch";
 import DataRenderer from "@/components/ui/DataRenderer";
 
@@ -38,7 +39,7 @@ export default async function Collections({
     filter: filter || "",
   });
 
-  const { collection } = data || {};
+  const { collection, isNext } = data || {};
 
   return (
     <>
@@ -87,6 +88,8 @@ export default async function Collections({
           ))
         }
       />
+
+      <Pagination page={page} isNext={isNext || false} />
     </>
   );
 }

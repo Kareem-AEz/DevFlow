@@ -5,6 +5,7 @@ import { PaginatedSearchParamsType } from "@/lib/validations";
 
 import TagCard from "@/components/layout/cards/TagCard";
 import CommonFilter from "@/components/layout/filters/CommonFilter";
+import Pagination from "@/components/layout/Pagination";
 import LocalSearch from "@/components/layout/search/LocalSearch";
 import DataRenderer from "@/components/ui/DataRenderer";
 
@@ -26,7 +27,7 @@ async function Tags({
     filter,
   });
 
-  const { tags } = data || {};
+  const { tags, isNext } = data || {};
 
   return (
     <>
@@ -59,6 +60,8 @@ async function Tags({
           </div>
         )}
       />
+
+      <Pagination page={page} isNext={isNext || false} />
     </>
   );
 }
