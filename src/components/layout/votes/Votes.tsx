@@ -31,8 +31,6 @@ const Votes = ({
   const session = useSession();
   const user = session.data?.user?.id;
 
-  console.log("user", user);
-
   const { data: hasVotedData } = use(hasVotedPromise);
   const { hasDownvoted, hasUpvoted } = hasVotedData || {};
 
