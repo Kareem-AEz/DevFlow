@@ -8,6 +8,8 @@ import { NotFoundError } from "../http-errors";
 import {
   GetUserProfileSchema,
   GetUserProfileSchemaType,
+  GetUserQuestionsSchema,
+  GetUserQuestionsSchemaType,
   PaginatedSearchParamsSchema,
   PaginatedSearchParamsType,
 } from "../validations";
@@ -17,6 +19,7 @@ import User, { IUser } from "@/database/user.model";
 import {
   ActionResponse,
   ErrorResponse,
+  Question as QuestionType,
   User as UserType,
 } from "@/types/global";
 
@@ -126,6 +129,52 @@ export async function getUserProfile(params: GetUserProfileSchemaType): Promise<
         user: JSON.parse(JSON.stringify(user)),
         totalQuestions,
         totalAnswers,
+      },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+}
+
+export async function getUserQuestions(
+  params: GetUserQuestionsSchemaType,
+): Promise<
+  ActionResponse<{
+    questions: QuestionType[];
+    isNext: boolean;
+  }>
+> {
+  const validationResult = await action({
+    params,
+    schema: GetUserQuestionsSchema,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const { userId, page = 1, pageSize = 10 } = validationResult.params!;
+  const skip = (Number(page) - 1) * Number(pageSize);
+  const limit = Number(pageSize);
+
+  try {
+    const totalQuestions = await Question.countDocuments({ author: userId });
+    const questions = await Question.find({ author: userId })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .select("_id title author tags createdAt")
+      .populate("author", "_id name username image")
+      .populate("tags", "_id name")
+      .lean();
+
+    const isNext = totalQuestions > skip + limit;
+
+    return {
+      success: true,
+      data: {
+        questions: JSON.parse(JSON.stringify(questions)),
+        isNext,
       },
     };
   } catch (error) {

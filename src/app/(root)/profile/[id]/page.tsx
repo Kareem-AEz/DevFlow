@@ -5,17 +5,30 @@ import { notFound } from "next/navigation";
 
 import dayjs from "dayjs";
 
-import { getUserProfile } from "@/lib/actions/user.actions";
+import { getUserProfile, getUserQuestions } from "@/lib/actions/user.actions";
 import { auth } from "@/lib/auth";
 
+import QuestionCard from "@/components/layout/cards/QuestionCard";
+import Pagination from "@/components/layout/Pagination";
 import Stats from "@/components/layout/search/Stats";
 import ProfileLink from "@/components/layout/user/ProfileLink";
 import { Button } from "@/components/ui/button";
+import DataRenderer from "@/components/ui/DataRenderer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import UserAvatar from "@/components/ui/UserAvatar";
 
-async function Profile({ params }: { params: Promise<{ id: string }> }) {
+import { STATES } from "@/constants/states";
+
+async function Profile({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ page: string; pageSize: string }>;
+}) {
   const { id } = await params;
+
+  const { page = 1, pageSize = 10 } = await searchParams;
 
   if (!id) notFound();
 
@@ -48,6 +61,16 @@ async function Profile({ params }: { params: Promise<{ id: string }> }) {
     reputation,
     createdAt,
   } = user;
+
+  const {
+    data: userQuestions,
+    success: userQuestionsSuccess,
+    error: userQuestionsError,
+  } = await getUserQuestions({
+    userId: id,
+    page: Number(page),
+    pageSize: Number(pageSize),
+  });
 
   return (
     <>
@@ -127,7 +150,24 @@ async function Profile({ params }: { params: Promise<{ id: string }> }) {
             value="top-posts"
             className="mt-5 flex w-full flex-col gap-6"
           >
-            List of Questions
+            <DataRenderer
+              empty={STATES.DEFAULT_EMPTY}
+              success={userQuestionsSuccess}
+              error={userQuestionsError}
+              data={userQuestions?.questions}
+              render={(questions) => (
+                <div className="flex flex-col gap-6">
+                  {questions.map((question) => (
+                    <QuestionCard key={question._id} question={question} />
+                  ))}
+                </div>
+              )}
+            />
+
+            <Pagination
+              page={Number(page)}
+              isNext={userQuestions?.isNext || false}
+            />
           </TabsContent>
           <TabsContent
             value="top-answers"
