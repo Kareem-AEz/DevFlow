@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { startTransition, use, useOptimistic } from "react";
 
 import Image from "next/image";
 import { useSession } from "next-auth/react";
@@ -9,7 +9,15 @@ import { toast } from "sonner";
 
 import { toggleSaveQuestion } from "@/lib/actions/collection.action";
 
-const SaveQuestion = ({ questionId }: { questionId: string }) => {
+import { ActionResponse } from "@/types/global";
+
+const SaveQuestion = ({
+  questionId,
+  hasSavedQuestion,
+}: {
+  questionId: string;
+  hasSavedQuestion: Promise<ActionResponse<{ saved: boolean }>>;
+}) => {
   const session = useSession();
   const user = session.data?.user?.id;
 
@@ -17,6 +25,10 @@ const SaveQuestion = ({ questionId }: { questionId: string }) => {
     if (!user) {
       return toast.error("You must be logged in to save a question");
     }
+
+    startTransition(() => {
+      saveAction(optimisticSaved);
+    });
 
     try {
       const { success, data } = await toggleSaveQuestion({
@@ -33,15 +45,18 @@ const SaveQuestion = ({ questionId }: { questionId: string }) => {
     }
   };
 
-  const hasSaved = false;
+  const { data: hasSavedData } = use(hasSavedQuestion);
+  const { saved } = hasSavedData || {};
+
+  const [optimisticSaved, saveAction] = useOptimistic(saved, (state) => !state);
 
   return (
     <Image
-      src={hasSaved ? "/icons/star-filled.svg" : "/icons/star.svg"}
+      src={optimisticSaved ? "/icons/star-filled.svg" : "/icons/star.svg"}
       alt="star"
       width={20}
       height={20}
-      className="cursor-pointer"
+      className={`size-5 cursor-pointer`}
       onClick={handleSave}
     />
   );

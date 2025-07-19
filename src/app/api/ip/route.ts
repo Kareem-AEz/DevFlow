@@ -5,7 +5,6 @@ export async function GET(request: Request) {
 
   const res = await fetch(`https://api.iplocation.net/?ip=${ip}`);
   const data = await res.json();
-  console.log(data);
   return Response.json({ ip, data });
 }
 

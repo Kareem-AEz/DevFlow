@@ -15,6 +15,7 @@ interface Props {
   imageUrl?: string | null;
   className?: string;
   fallbackClassName?: string;
+  size?: number;
 }
 
 const UserAvatar = ({
@@ -23,6 +24,7 @@ const UserAvatar = ({
   imageUrl,
   className = "h-9 w-9",
   fallbackClassName,
+  size = 36,
 }: Props) => {
   const initials = name
     .split(" ")
@@ -39,8 +41,8 @@ const UserAvatar = ({
             src={imageUrl}
             alt={name}
             className="w-full object-cover"
-            width={36}
-            height={36}
+            width={size}
+            height={size}
             quality={100}
           />
         ) : (

@@ -18,7 +18,7 @@ import TagCard from "@/components/layout/cards/TagCard";
 import Preview from "@/components/layout/editor/Preview";
 import AnswerForm from "@/components/layout/forms/AnswerForm";
 import Metric from "@/components/layout/Metric";
-import SaveQuestion from "@/components/layout/question/SaveQuestion";
+import SaveQuestion from "@/components/layout/Q/SaveQuestion";
 import Votes from "@/components/layout/votes/Votes";
 import UserAvatar from "@/components/ui/UserAvatar";
 
@@ -81,7 +81,7 @@ const QuestionDetails = async ({ params }: { params: Params }) => {
             </Link>
           </div>
 
-          <div className="flex justify-end">
+          <div className="flex items-center justify-end gap-4">
             <Suspense fallback={<div>Loading...</div>}>
               <Votes
                 upvotes={question.upvotes}
@@ -93,7 +93,10 @@ const QuestionDetails = async ({ params }: { params: Params }) => {
             </Suspense>
 
             <Suspense fallback={<div>Loading...</div>}>
-              <SaveQuestion questionId={id} hasSaved={hasSavedPromise} />
+              <SaveQuestion
+                questionId={id}
+                hasSavedQuestion={hasSavedPromise}
+              />
             </Suspense>
           </div>
         </div>

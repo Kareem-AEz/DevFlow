@@ -36,7 +36,8 @@ type AnswerType = {
   createdAt: Date;
   upvotes: number;
   downvotes: number;
-1};
+  1;
+};
 
 // Action response type
 type ActionResponse<T = null> = {
@@ -65,3 +66,16 @@ type APIResponse<T = null> =
 //
 type Params = Promise<Record<string, string>>;
 type SearchParams = Promise<Record<string, string>>;
+
+export type Collection = {
+  readonly _id: string;
+  author: string | author;
+  questions: Question[];
+};
+
+// Collection type after aggregation pipeline with $unwind
+export type AggregatedCollection = {
+  readonly _id: string;
+  author: string | author;
+  questions: Question; // Single question after $unwind
+};

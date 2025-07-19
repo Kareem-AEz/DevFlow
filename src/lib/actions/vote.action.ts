@@ -145,10 +145,18 @@ export async function createVote(
 
     await session.commitTransaction();
 
-    revalidatePath(ROUTES.QUESTION(targetId));
+    try {
+      revalidatePath(ROUTES.QUESTION(targetId));
+    } catch (error) {
+      console.error(error);
+    }
     return { success: true };
   } catch (error) {
-    await session.abortTransaction();
+    // [BUG] Check transaction state before attempting to abort
+    // Only abort if transaction is still active (not committed/aborted)
+    if (session.inTransaction()) {
+      await session.abortTransaction();
+    }
     return handleError(error) as ErrorResponse;
   } finally {
     await session.endSession();

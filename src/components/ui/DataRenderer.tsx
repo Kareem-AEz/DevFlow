@@ -42,14 +42,16 @@ function StateSkeleton({ image, title, message, button }: StateSkeletonProps) {
           alt={image.alt}
           width={270}
           height={200}
-          className="hidden object-contain dark:block"
+          priority
+          className="hidden h-auto w-auto object-contain dark:block"
         />
         <Image
           src={image.light}
           alt={image.alt}
           width={270}
           height={200}
-          className="block object-contain dark:hidden"
+          priority
+          className="block h-auto w-auto object-contain dark:hidden"
         />
       </>
 

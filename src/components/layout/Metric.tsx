@@ -3,6 +3,8 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
+
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -29,13 +31,30 @@ const Metric = ({
 }: Props) => {
   const metricContent = (
     <>
-      <Image
-        src={imgUrl}
-        width={16}
-        height={16}
-        alt={alt}
-        className={`rounded-full object-contain ${imgStyles}`}
-      />
+      <Avatar className={cn("relative", imgStyles)}>
+        {imgUrl ? (
+          <Image
+            src={imgUrl}
+            alt={alt}
+            className="w-full object-cover"
+            width={16}
+            height={16}
+            quality={100}
+          />
+        ) : (
+          <AvatarFallback
+            className={cn(
+              "primary-gradient font-space-grotesk rounded-full font-bold tracking-wider text-white",
+            )}
+          >
+            {alt
+              .split(" ")
+              .map((word) => word[0])
+              .join("")
+              .toUpperCase()}
+          </AvatarFallback>
+        )}
+      </Avatar>
 
       <p className={`${textStyles} flex items-center gap-1`}>
         {value}
