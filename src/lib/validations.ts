@@ -253,3 +253,9 @@ export const CollectionBaseSchema = z.object({
 });
 
 export type CollectionBaseSchemaType = z.infer<typeof CollectionBaseSchema>;
+
+export const GetUserProfileSchema = z.object({
+  userId: z.string().min(1, { message: "User ID is required" }),
+});
+
+export type GetUserProfileSchemaType = z.infer<typeof GetUserProfileSchema>;
