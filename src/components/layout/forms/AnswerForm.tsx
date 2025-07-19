@@ -84,8 +84,6 @@ function AnswerForm({
         userAnswer,
       );
 
-      console.log({ data });
-
       if (!success) {
         // 🚨 AI failed to deliver the goods! Let's let the user know with a little humor.
         toast.error("Error generating answer", {

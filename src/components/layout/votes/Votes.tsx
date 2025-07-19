@@ -31,7 +31,9 @@ const Votes = ({
   const session = useSession();
   const user = session.data?.user?.id;
 
-  const { success: hasVotedSuccess, data: hasVotedData } = use(hasVotedPromise);
+  console.log("user", user);
+
+  const { data: hasVotedData } = use(hasVotedPromise);
   const { hasDownvoted, hasUpvoted } = hasVotedData || {};
 
   const votingState = {
@@ -156,14 +158,14 @@ const Votes = ({
         });
       }
 
-      const successMessage =
-        type === "upvote"
-          ? `Upvote ${!hasUpvoted ? "added" : "removed"} successfully`
-          : `Downvote ${!hasDownvoted ? "added" : "removed"} successfully`;
+      // const successMessage =
+      //   type === "upvote"
+      //     ? `Upvote ${!hasUpvoted ? "added" : "removed"} successfully`
+      //     : `Downvote ${!hasDownvoted ? "added" : "removed"} successfully`;
 
-      toast.success(successMessage, {
-        description: "Thank you for your contribution!",
-      });
+      // toast.success(successMessage, {
+      //   description: "Thank you for your contribution!",
+      // });
 
       //
     } catch {

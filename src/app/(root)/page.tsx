@@ -3,11 +3,13 @@ import Link from "next/link";
 import { getQuestions } from "@/lib/actions/question.action";
 
 import QuestionCard from "@/components/layout/cards/QuestionCard";
+import CommonFilter from "@/components/layout/filters/CommonFilter";
 import HomeFilter from "@/components/layout/filters/HomeFilter";
 import LocalSearch from "@/components/layout/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import DataRenderer from "@/components/ui/DataRenderer";
 
+import { HomePageFilters } from "@/constants/filters";
 import { ROUTES } from "@/constants/routes";
 import { STATES } from "@/constants/states";
 import { SearchParams } from "@/types/global";
@@ -40,8 +42,6 @@ export default async function Home({
     filter: filter || "",
   });
 
-  console.log(data);
-
   const { questions } = data || {};
 
   return (
@@ -56,12 +56,18 @@ export default async function Home({
           <Link href={ROUTES.ASK_A_QUESTION}>Ask a Question</Link>
         </Button>
       </section>
-      <section className="mt-11">
+      <section className="mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center">
         <LocalSearch
           imgSrc="/icons/search.svg"
           placeholder="Search questions..."
           className="flex-1"
           route={ROUTES.HOME}
+        />
+
+        <CommonFilter
+          filters={HomePageFilters}
+          otherClasses=" min-h-[56px] sm:min-w-[170px]"
+          containerClasses="hidden max-md:flex max-sm:self-end"
         />
       </section>
       {/*   */}

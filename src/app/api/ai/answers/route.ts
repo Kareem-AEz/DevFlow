@@ -54,8 +54,6 @@ export async function POST(req: Request): Promise<
       userAnswer,
     });
 
-    console.log({ validatedData });
-
     if (!validatedData.success)
       throw new ValidationError(validatedData.error.flatten().fieldErrors);
 
