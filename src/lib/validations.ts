@@ -259,3 +259,23 @@ export const GetUserProfileSchema = z.object({
 });
 
 export type GetUserProfileSchemaType = z.infer<typeof GetUserProfileSchema>;
+
+export const GetUserQuestionsSchema = PaginatedSearchParamsSchema.omit({
+  filter: true,
+  sortBy: true,
+  query: true,
+}).extend({
+  userId: z.string().min(1, { message: "User ID is required" }),
+});
+
+export type GetUserQuestionsSchemaType = z.infer<typeof GetUserQuestionsSchema>;
+
+export const GetUserAnswersSchema = PaginatedSearchParamsSchema.omit({
+  filter: true,
+  sortBy: true,
+  query: true,
+}).extend({
+  userId: z.string().min(1, { message: "User ID is required" }),
+});
+
+export type GetUserAnswersSchemaType = z.infer<typeof GetUserAnswersSchema>;
