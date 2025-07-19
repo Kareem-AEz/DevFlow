@@ -23,10 +23,17 @@ import Votes from "@/components/layout/votes/Votes";
 import UserAvatar from "@/components/ui/UserAvatar";
 
 import { ROUTES } from "@/constants/routes";
-import { Params, Tag } from "@/types/global";
+import { Params, SearchParams, Tag } from "@/types/global";
 
-const QuestionDetails = async ({ params }: { params: Params }) => {
+const QuestionDetails = async ({
+  params,
+  searchParams,
+}: {
+  params: Params;
+  searchParams: SearchParams;
+}) => {
   const { id } = await params;
+  const { page, pageSize, filter } = await searchParams;
 
   after(async () => {
     incrementQuestionViews({
@@ -48,9 +55,9 @@ const QuestionDetails = async ({ params }: { params: Params }) => {
     error: answersError,
   } = await getAnswers({
     questionId: id,
-    page: 1,
-    pageSize: 10,
-    filter: "latest",
+    page: Number(page) || 1,
+    pageSize: Number(pageSize) || 10,
+    filter: filter || "latest",
   });
 
   const hasVotedPromise = hasVoted({

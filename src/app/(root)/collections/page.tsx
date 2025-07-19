@@ -1,9 +1,11 @@
 import { getSavedCollections } from "@/lib/actions/collection.action";
 
 import QuestionCard from "@/components/layout/cards/QuestionCard";
+import CommonFilter from "@/components/layout/filters/CommonFilter";
 import LocalSearch from "@/components/layout/search/LocalSearch";
 import DataRenderer from "@/components/ui/DataRenderer";
 
+import { CollectionFilters } from "@/constants/filters";
 import { ROUTES } from "@/constants/routes";
 import { STATES } from "@/constants/states";
 import { SearchParams } from "@/types/global";
@@ -48,6 +50,10 @@ export default async function Collections({
           placeholder="Search questions..."
           className="flex-1"
           route={ROUTES.COLLECTIONS}
+        />
+        <CommonFilter
+          filters={CollectionFilters}
+          otherClasses="min-h-[56px] sm:min-w-[170px]"
         />
       </div>
       {/*  */}
