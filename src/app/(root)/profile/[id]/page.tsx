@@ -111,7 +111,6 @@ async function Profile({
             imageUrl={image}
             className="size-36 rounded-full object-cover"
             fallbackClassName=" text-6xl font-bold"
-            size={140}
           />
           <div className="mt-3">
             <h2 className="h2-bold text-dark100_light900">{name}</h2>
