@@ -55,8 +55,8 @@ export default function AuthForm<T extends FieldValues>({
   formType,
 }: AuthFormProps<T>) {
   // 1. Define your form.
-  const form = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
+  const form = useForm<T>({
+    resolver: zodResolver(schema as any),
     defaultValues: fields.reduce(
       (acc, field) => ({ ...acc, [field.name]: field.defaultValue }),
       {} as DefaultValues<T>,

@@ -7,6 +7,9 @@ import { useRouter } from "next/navigation";
 
 import { toast } from "sonner";
 
+import { deleteAnswer } from "@/lib/actions/answer.actions";
+import { deleteQuestion } from "@/lib/actions/question.action";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -34,10 +37,10 @@ const EditDeleteAction = ({ type, id }: Props) => {
 
   const handleDelete = async () => {
     if (type === "question") {
-      // await deleteQuestion(id);
+      await deleteQuestion({ questionId: id });
       toast.success("Question deleted successfully");
     } else if (type === "answer") {
-      // await deleteAnswer(id);
+      await deleteAnswer({ answerId: id });
       toast.success("Answer deleted successfully");
     }
   };

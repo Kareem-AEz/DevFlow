@@ -34,12 +34,12 @@ async function Profile({
   searchParams: Promise<{ page: string; pageSize: string }>;
 }) {
   const { id } = await params;
+  const loggedInUser = await auth();
 
   const { page = 1, pageSize = 10 } = await searchParams;
 
   if (!id) notFound();
 
-  const loggedInUser = await auth();
   const {
     data: userProfile,
     success: userProfileSuccess,
@@ -162,6 +162,7 @@ async function Profile({
           SILVER: 0,
           BRONZE: 0,
         }}
+        reputation={reputation || 0}
       />
 
       <section className="mt-10 flex gap-10">

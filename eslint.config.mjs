@@ -20,6 +20,7 @@ const eslintConfig = [
       "unused-imports": unusedImports,
     },
     rules: {
+      ignorePatterns: ["components/ui/**"],
       "no-undef": "off",
       "@typescript-eslint/no-unused-vars": "warn",
       "simple-import-sort/imports": [

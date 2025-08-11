@@ -10,12 +10,14 @@ import { NotFoundError } from "../http-errors";
 import {
   CreateAnswerParamsSchema,
   CreateAnswerParamsType,
+  DeleteAnswerSchema,
+  DeleteAnswerSchemaType,
   GetAnswersParamsSchema,
   GetAnswersParamsType,
 } from "../validations";
 
-import { Question } from "@/database";
-import Answer, { IAnswerDocument } from "@/database/answer.model";
+import { Answer, Question, Vote } from "@/database";
+import { IAnswerDocument } from "@/database/answer.model";
 import { ActionResponse, AnswerType, ErrorResponse } from "@/types/global";
 
 export async function createAnswer(
@@ -149,5 +151,49 @@ export async function getAnswers(params: GetAnswersParamsType): Promise<
     return handleError(error) as ErrorResponse;
   } finally {
     session.endSession();
+  }
+}
+
+export async function deleteAnswer(
+  params: DeleteAnswerSchemaType,
+): Promise<ActionResponse> {
+  const validationResult = await action({
+    params,
+    schema: DeleteAnswerSchema,
+    authorize: true,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const { answerId } = validationResult.params!;
+  const { user } = validationResult.session!;
+
+  try {
+    const answer = await Answer.findById(answerId);
+    if (!answer) throw new Error("Answer not found");
+
+    if (answer.author.toString() !== user?.id)
+      throw new Error("You're not allowed to delete this answer");
+
+    // reduce the question answers count
+    await Question.findByIdAndUpdate(
+      answer.question,
+      { $inc: { answers: -1 } },
+      { new: true },
+    );
+
+    // delete votes associated with answer
+    await Vote.deleteMany({ actionId: answerId, actionType: "answer" });
+
+    // delete the answer
+    await Answer.findByIdAndDelete(answerId);
+
+    revalidatePath(`/profile/${user?.id}`);
+
+    return { success: true };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
   }
 }
