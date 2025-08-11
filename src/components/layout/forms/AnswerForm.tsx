@@ -99,6 +99,8 @@ function AnswerForm({
           .replace(/<br>/g, "\n") // Use newlines instead of spaces for better formatting
           .trim();
 
+        console.log({ success, data });
+
         // ✨ Set the generated content to the form field
         form.reset();
         form.setValue("content", formattedAnswer);

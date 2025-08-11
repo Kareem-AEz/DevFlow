@@ -58,7 +58,7 @@ export async function POST(req: Request): Promise<
       throw new ValidationError(validatedData.error.flatten().fieldErrors);
 
     // 🔍 Enable online search with comprehensive configuration
-    const { text, usage, providerMetadata } = await generateText({
+    const { text, usage, totalUsage, providerMetadata } = await generateText({
       model,
       system: `
         You're an expert, friendly assistant who crafts clear, engaging, and concise answers in markdown.
@@ -102,10 +102,10 @@ export async function POST(req: Request): Promise<
 
     // 🔍 Clean token usage calculation with reasoning tokens
     const tokens = {
-      promptTokens: usage.promptTokens,
-      completionTokens: usage.completionTokens,
+      promptTokens: usage.inputTokens || 0,
+      completionTokens: usage.outputTokens || 0,
       reasoningTokens: reasoningTokens || 0, // From xAI provider metadata
-      totalTokens: usage.totalTokens + (reasoningTokens || 0),
+      totalTokens: (usage.totalTokens || 0) + (reasoningTokens || 0),
     };
 
     // 💰 Calculate cost for Grok 3 Mini
