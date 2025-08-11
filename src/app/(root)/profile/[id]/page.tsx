@@ -15,6 +15,7 @@ import { auth } from "@/lib/auth";
 
 import AnswerCard from "@/components/layout/answers/AnswerCard";
 import QuestionCard from "@/components/layout/cards/QuestionCard";
+import TagCard from "@/components/layout/cards/TagCard";
 import Pagination from "@/components/layout/Pagination";
 import Stats from "@/components/layout/search/Stats";
 import ProfileLink from "@/components/layout/user/ProfileLink";
@@ -24,7 +25,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import UserAvatar from "@/components/ui/UserAvatar";
 
 import { STATES } from "@/constants/states";
-import TagCard from "@/components/layout/cards/TagCard";
 
 async function Profile({
   params,
@@ -187,7 +187,13 @@ async function Profile({
               render={(questions) => (
                 <div className="flex flex-col gap-6">
                   {questions.map((question) => (
-                    <QuestionCard key={question._id} question={question} />
+                    <QuestionCard
+                      key={question._id}
+                      question={question}
+                      showActions={
+                        loggedInUser?.user?.id === question.author._id
+                      }
+                    />
                   ))}
                 </div>
               )}
@@ -200,7 +206,7 @@ async function Profile({
           </TabsContent>
           <TabsContent
             value="top-answers"
-            className="mt-5 flex w-full flex-col gap-6"
+            className="mt-5 flex w-full flex-col gap-10"
           >
             <DataRenderer
               empty={STATES.DEFAULT_EMPTY}
@@ -210,7 +216,11 @@ async function Profile({
               render={(answers) => (
                 <div className="flex flex-col gap-6">
                   {answers.map((answer) => (
-                    <AnswerCard key={answer._id} {...answer} />
+                    <AnswerCard
+                      key={answer._id}
+                      {...answer}
+                      showActions={loggedInUser?.user?.id === answer.author._id}
+                    />
                   ))}
                 </div>
               )}

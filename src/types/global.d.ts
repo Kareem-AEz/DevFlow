@@ -37,7 +37,7 @@ type AnswerType = {
   createdAt: Date;
   upvotes: number;
   downvotes: number;
-  1;
+  showActions?: boolean;
 };
 
 // Action response type
