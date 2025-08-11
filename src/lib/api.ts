@@ -36,7 +36,7 @@ export const api = {
       user,
     }: SignInWithOAuthResponseType) =>
       fetchHandler<SignInWithOAuthResponseType>(
-        `${API_BASE_URL}/api/auth/sign-in-with-oauth`,
+        `${API_BASE_URL}/auth/sign-in-with-oauth`,
         {
           method: "POST",
           body: JSON.stringify({ provider, providerAccountId, user }),
@@ -44,17 +44,17 @@ export const api = {
       ),
   },
   users: {
-    ...createCrud<IUser>(`${API_BASE_URL}/api/users`),
+    ...createCrud<IUser>(`${API_BASE_URL}/users`),
     getByEmail: async (email: string) =>
-      fetchHandler<IUser>(`${API_BASE_URL}/api/users/email`, {
+      fetchHandler<IUser>(`${API_BASE_URL}/users/email`, {
         method: "POST",
         body: JSON.stringify({ email }),
       }),
   },
   accounts: {
-    ...createCrud<IAccount>(`${API_BASE_URL}/api/accounts`),
+    ...createCrud<IAccount>(`${API_BASE_URL}/accounts`),
     getByProviderId: async (providerAccountId: string) =>
-      fetchHandler<IAccount>(`${API_BASE_URL}/api/accounts/provider`, {
+      fetchHandler<IAccount>(`${API_BASE_URL}/accounts/provider`, {
         method: "POST",
         body: JSON.stringify({ providerAccountId }),
       }),
@@ -69,7 +69,7 @@ export const api = {
           providerMetadata: unknown;
           sources: unknown;
         }>
-      >(`${API_BASE_URL}/api/ai/answers`, {
+      >(`${API_BASE_URL}/ai/answers`, {
         method: "POST",
         body: JSON.stringify({ question, content, userAnswer }),
         timeout: 100000,
