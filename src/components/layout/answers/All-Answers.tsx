@@ -1,5 +1,7 @@
 import React from "react";
 
+import { auth } from "@/lib/auth";
+
 import DataRenderer from "@/components/ui/DataRenderer";
 
 import CommonFilter from "../filters/CommonFilter";
@@ -17,7 +19,7 @@ interface Props extends ActionResponse<AnswerType[]> {
   isNext: boolean;
 }
 
-function AllAnswers({
+async function AllAnswers({
   data,
   success,
   error,
@@ -25,6 +27,8 @@ function AllAnswers({
   page,
   isNext,
 }: Props) {
+  const session = await auth();
+
   return (
     <div className="mt-11">
       <div className="flex items-center justify-between">
@@ -44,7 +48,13 @@ function AllAnswers({
         error={error}
         empty={STATES.EMPTY_ANSWERS}
         render={(answers) =>
-          answers.map((answer) => <AnswerCard key={answer._id} {...answer} />)
+          answers.map((answer) => (
+            <AnswerCard
+              key={answer._id}
+              {...answer}
+              showActions={session?.user?.id === answer.author._id}
+            />
+          ))
         }
       />
 

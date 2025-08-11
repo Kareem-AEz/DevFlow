@@ -3,6 +3,7 @@ export const ROUTES = {
   SIGN_IN: "/sign-in",
   SIGN_UP: "/sign-up",
   QUESTION: (id: string) => `/questions/${id}`,
+  EDIT_QUESTION: (id: string) => `/questions/${id}/edit`,
   PROFILE: (id: string) => `/profile/${id}`,
   TAG: (id: string) => `/tags/${id}`,
   TAGS: "/tags",
