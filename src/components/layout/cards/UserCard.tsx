@@ -21,7 +21,6 @@ const UserCard = ({ _id, name, username, image }: UserCardProps) => (
         name={name}
         imageUrl={image}
         className="size-24 rounded-full object-cover"
-        size={128}
         fallbackClassName=" text-3xl tracking-widest"
       />
 
