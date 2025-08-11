@@ -380,18 +380,17 @@ export async function getQuestions(
   }
 
   try {
-    // 🔗 Populate related data for rich question display
-    // Only fetch essential fields to keep response size reasonable
-    const questions = await Question.find(queryFilter)
-      .populate("tags", "name") // Tag names for filtering/display
-      .populate("author", "name image") // Author info for attribution
-      .lean() // Return plain objects (faster)
-      .sort(sortCriteria)
-      .skip(skip)
-      .limit(limit);
-
-    // 📊 Count total matches for pagination metadata
-    const totalQuestions = await Question.countDocuments(queryFilter);
+    // 🚀 PERFORMANCE OPTIMIZATION: Run query and count in parallel
+    const [questions, totalQuestions] = await Promise.all([
+      Question.find(queryFilter)
+        .populate("tags", "name") // Tag names for filtering/display
+        .populate("author", "name image") // Author info for attribution
+        .lean() // Return plain objects (faster)
+        .sort(sortCriteria)
+        .skip(skip)
+        .limit(limit),
+      Question.countDocuments(queryFilter),
+    ]);
 
     // ✨ Calculate if there are more pages (for infinite scroll/pagination)
     const isNext = skip + limit < totalQuestions;
@@ -399,8 +398,8 @@ export async function getQuestions(
     return {
       success: true,
       data: {
-        // 🔄 Convert Mongoose documents to plain objects for serialization
-        questions: JSON.parse(JSON.stringify(questions)),
+        // 🔄 Lean queries already return plain objects, cast safely through unknown
+        questions: questions as unknown as QuestionType[],
         isNext,
       },
     };
