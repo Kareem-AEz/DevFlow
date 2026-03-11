@@ -71,9 +71,8 @@ export default async function Home({
           containerClasses="hidden max-md:flex max-sm:self-end"
         />
       </section>
-      {/*   */}
       <HomeFilter />
-      {/*  */}
+
       {/* {success ? (
         <div className="mt-10 flex w-full flex-col gap-6">
           {questions && questions.length > 0 ? (
